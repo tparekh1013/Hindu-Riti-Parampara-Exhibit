@@ -1,0 +1,1210 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Riti & Parampara Exhibit Plan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Mukta:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: plan document. Header, a dark exhibit viewer with its controls and 2D tabs, then the build write-up in card grids. */
+:root {
+  --bg: #f1ebe2; --surface: #fffaf3; --fg: #241815; --muted: #6f5f56; --line: #ddcfbd;
+  --accent: #9c6a1c; --riti: #8a2a40; --param: #a5641a; --stage: #120c0a;
+  --display: 'Marcellus', Georgia, serif; --body: 'Mukta', system-ui, sans-serif; --mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15100e; --surface: #1f1714; --fg: #f1e6d6; --muted: #b2a08f; --line: #3a2c26; --accent: #e2b45e; --riti: #e48298; --param: #e7a75a; color-scheme: dark; } }
+:root[data-theme="dark"] { --bg: #15100e; --surface: #1f1714; --fg: #f1e6d6; --muted: #b2a08f; --line: #3a2c26; --accent: #e2b45e; --riti: #e48298; --param: #e7a75a; color-scheme: dark; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6; margin: 0; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 40px; }
+header { display: grid; gap: 10px; max-width: 780px; }
+.eyebrow { margin: 0; font: 600 11px var(--mono); letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); }
+h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(34px, 6vw, 54px); line-height: 1.05; text-wrap: balance; }
+h1 span { font: 600 0.28em var(--mono); letter-spacing: 0.12em; vertical-align: middle; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; margin-left: 8px; }
+.intro { margin: 0; color: var(--muted); max-width: 70ch; }
+.route { margin: 0; font-size: 13px; font-weight: 600; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.route i { font-style: normal; color: var(--muted); }
+.route b { font-weight: 600; padding: 2px 9px; border-radius: 4px; color: #fff; }
+.route .r { background: var(--riti); } .route .p { background: var(--param); }
+:root[data-theme="dark"] .route b { color: #15100e; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .route b { color: #15100e; } }
+
+.viewer-block { display: grid; gap: 10px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.controls .group { display: flex; flex-wrap: wrap; gap: 6px; }
+.controls .sep { width: 1px; height: 24px; background: var(--line); margin: 0 4px; }
+.btn { font: 600 13px var(--body); color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 7px 12px; cursor: pointer; }
+.btn:hover { border-color: var(--muted); }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.btn.play { color: var(--accent); }
+.btn.play[aria-pressed="true"] { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+.glabel { font: 600 11px var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); align-self: center; margin-right: 2px; }
+.btn.r-z { border-left: 3px solid var(--riti); } .btn.p-z { border-left: 3px solid var(--param); }
+
+.viewer { position: relative; height: clamp(440px, 70vh, 760px); background: var(--stage); border-radius: 10px; overflow: hidden; touch-action: none; }
+.viewer canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+.viewer canvas:active { cursor: grabbing; }
+#loading { position: absolute; inset: 0; display: grid; place-items: center; color: #c9b9a2; font: 500 12px var(--mono); letter-spacing: 0.16em; text-transform: uppercase; background: var(--stage); text-align: center; padding: 20px; }
+.scale { position: absolute; left: 12px; bottom: 10px; font: 500 11px var(--mono); color: #a99a86; pointer-events: none; }
+.hint { position: absolute; right: 12px; bottom: 10px; font-size: 12px; color: #93846f; pointer-events: none; text-align: right; }
+#labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.lbl { position: absolute; transform: translate(-50%, -100%); pointer-events: auto; font: 600 11.5px var(--body); color: #f4ebde; background: rgba(18, 12, 10, 0.8); border: 1px solid rgba(255, 255, 255, 0.14); border-left: 3px solid var(--c, #e2b45e); border-radius: 4px; padding: 2px 8px; white-space: nowrap; cursor: pointer; }
+.lbl:hover, .lbl:focus-visible { background: rgba(18, 12, 10, 0.96); outline: none; border-color: rgba(255, 255, 255, 0.4); }
+#card { position: absolute; top: 12px; right: 12px; width: min(350px, calc(100% - 24px)); max-height: calc(100% - 24px); overflow: auto; background: rgba(22, 15, 13, 0.95); color: #efe5d6; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; padding: 16px 16px 14px; display: grid; gap: 8px; }
+#card .tag { font: 600 10.5px var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--c, #e2b45e); }
+#card h3 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 25px; line-height: 1.15; }
+#card p { margin: 0; font-size: 14px; line-height: 1.55; color: #d6cab8; }
+#card dl { margin: 4px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 13.5px; }
+#card dt { color: #9a8b78; font-weight: 600; }
+#card dd { margin: 0; color: #eadfcf; }
+#card .close { position: absolute; top: 8px; right: 8px; background: none; border: 0; color: #a99a86; font-size: 20px; line-height: 1; cursor: pointer; padding: 4px 8px; border-radius: 4px; }
+#card .close:focus-visible { outline: 2px solid #e2b45e; }
+@media (max-width: 640px) { #card { top: auto; bottom: 10px; left: 10px; right: 10px; width: auto; max-height: 55%; } .hint { display: none; } }
+.ib { font: 600 16px var(--body); width: 36px; height: 36px; display: grid; place-items: center; color: #f4ebde; background: rgba(18, 12, 10, 0.86); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 6px; cursor: pointer; padding: 0; touch-action: none; user-select: none; -webkit-user-select: none; }
+.ib:hover { border-color: rgba(255, 255, 255, 0.42); }
+.ib:focus-visible, .stops button:focus-visible, #c:focus-visible { outline: 2px solid #e2b45e; outline-offset: -2px; }
+.ib.wide { width: auto; min-width: 72px; padding: 0 12px; font-size: 13px; }
+.zoomctl { position: absolute; left: 12px; top: 12px; display: grid; gap: 6px; }
+.pad { position: absolute; right: 14px; bottom: 34px; display: grid; grid-template-columns: repeat(3, 46px); grid-template-rows: repeat(2, 46px); gap: 6px; }
+.pad .ib { width: 46px; height: 46px; }
+.pad [data-k="KeyW"] { grid-column: 2; grid-row: 1; } .pad [data-k="ArrowLeft"] { grid-column: 1; grid-row: 2; } .pad [data-k="KeyS"] { grid-column: 2; grid-row: 2; } .pad [data-k="ArrowRight"] { grid-column: 3; grid-row: 2; }
+.tour { position: absolute; left: 50%; transform: translateX(-50%); bottom: 12px; width: min(760px, calc(100% - 24px)); display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 12px; align-items: center; background: rgba(18, 12, 10, 0.9); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; padding: 10px 12px; }
+.tour input { width: 100%; accent-color: #e2b45e; }
+.stops { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; }
+.stops button { font: 600 11.5px var(--body); color: #ebe0d0; background: transparent; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 999px; padding: 3px 10px; cursor: pointer; }
+.stops button[aria-current="true"] { background: #e2b45e; color: #1a120e; border-color: #e2b45e; }
+#c { outline: none; }
+.dim, .dimtag { position: absolute; transform: translate(-50%, -50%); pointer-events: none; font: 600 10.5px var(--mono); white-space: nowrap; border-radius: 3px; padding: 2px 6px; }
+.dim { color: #1d1408; background: #e8b25c; }
+.dimtag { color: #f6e6c6; background: rgba(18, 12, 10, 0.9); border: 1px solid #e8b25c; transform: translate(-50%, -100%); }
+.clr { position: absolute; transform: translate(-50%, -50%); pointer-events: none; font: 600 11px var(--mono); white-space: nowrap; border-radius: 999px; padding: 3px 9px; color: #fff; }
+.clr.ok { background: #2f8a55; } .clr.warn { background: #b7791f; } .clr.bad { background: #c0392b; }
+.spottag { position: absolute; transform: translate(-50%, -100%); pointer-events: none; font: 600 10.5px var(--mono); color: #1d1408; background: #f2c46b; border-radius: 999px; padding: 1px 6px; white-space: nowrap; }
+.spot-legend, .clear-legend { position: absolute; bottom: 34px; display: flex; gap: 4px 14px; max-width: calc(100% - 24px); background: rgba(18, 12, 10, 0.9); color: #efe5d6; border-radius: 8px; padding: 8px 12px; font: 600 12px var(--body); }
+.spot-legend { left: 12px; flex-direction: column; gap: 2px; border: 1px solid rgba(242, 196, 107, 0.5); }
+.spot-legend span { font-weight: 500; color: rgba(239, 229, 214, 0.7); }
+.clear-legend { right: 12px; flex-wrap: wrap; border: 1px solid rgba(255, 255, 255, 0.12); }
+.clear-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.clear-legend .sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.sw.g { background: #34c76e; } .sw.a { background: #f2a83c; } .sw.b { background: #6092f0; } .sw.r { background: #c0392b; }
+.viewer.is2d { height: auto; background: var(--surface); border: 1px solid var(--line); touch-action: auto; }
+.viewer.is2d canvas, .viewer.is2d #labels, .viewer.is2d .scale, .viewer.is2d .hint, .viewer.is2d .zoomctl, .viewer.is2d #card, .viewer.is2d .pad, .viewer.is2d .tour, .viewer.is2d .clear-legend, .viewer.is2d .spot-legend { display: none !important; }
+#plan2d { padding: 20px; display: grid; gap: 14px; color: var(--fg); }
+.plan-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.plan-head h3 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 25px; }
+.plan-head p { margin: 0; font-size: 13.5px; color: var(--muted); }
+.plan-scroll, .mat-scroll { overflow-x: auto; }
+.plan-scroll svg { display: block; width: 100%; min-width: 780px; height: auto; }
+.p-grid { stroke: var(--line); stroke-width: 0.6; }
+.p-zr { fill: var(--riti); fill-opacity: 0.07; } .p-zp { fill: var(--param); fill-opacity: 0.08; }
+.p-wall { stroke: var(--fg); stroke-width: 7; stroke-linecap: square; }
+.p-piece { fill: var(--line); stroke: var(--muted); stroke-width: 1.2; }
+.p-panel { fill: var(--accent); fill-opacity: 0.55; }
+.p-strip { stroke: #e0a83c; stroke-width: 6; stroke-linecap: butt; }
+.p-card { fill: #f6dca0; stroke: #8a5d18; stroke-width: 0.8; }
+.p-map { fill: #ffffff; stroke: var(--muted); stroke-width: 1.2; }
+.p-tier { fill: var(--riti); fill-opacity: 0.18; stroke: var(--riti); stroke-width: 1; }
+.p-dash { fill: none; stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 5 4; }
+.p-dim { stroke: var(--accent); stroke-width: 1.1; }
+.p-dimt { fill: var(--fg); font: 600 11px var(--mono); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.p-note { fill: var(--muted); font: 600 11px var(--mono); letter-spacing: 0.06em; }
+.p-zl { font: 400 22px var(--display); fill-opacity: 0.55; }
+.p-badge circle { fill: var(--accent); }
+.p-badge text { fill: var(--surface); font: 700 10px var(--body); }
+.p-fix circle { fill: #f2c46b; stroke: var(--surface); stroke-width: 1.5; }
+.p-fix text { fill: #1d1408; font: 700 9px var(--body); }
+.p-aim { stroke: #d99a2b; stroke-width: 1.3; stroke-dasharray: 3 3; }
+.p-diya { fill: #ff9f40; }
+.lf { background: #f2c46b !important; color: #1d1408 !important; }
+.light-note { font-size: 13.5px; color: var(--muted); margin: 4px 0; max-width: 78ch; }
+table.mat { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14px; }
+table.bom { margin-top: 10px; }
+table.bom tr.grp td { font: 600 11px var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); padding-top: 16px; border-bottom: 1px solid var(--line); }
+table.bom .spec { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.bom-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin: 12px 0; }
+.bom-stats .stat { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--bg); }
+.bom-stats .stat.key { border-color: var(--accent); }
+.bom-stats b { display: block; font: 400 26px var(--display); font-variant-numeric: tabular-nums; }
+.bom-stats span { font-size: 12.5px; color: var(--muted); }
+table.mat th { text-align: left; font: 600 10.5px var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--line); }
+table.mat td { padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--muted); }
+table.mat td b { color: var(--fg); font-weight: 600; }
+table.mat td.n span { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 4px; border-radius: 11px; background: var(--accent); color: var(--surface); font-size: 10.5px; font-weight: 700; }
+table.mat td.q { white-space: nowrap; color: var(--fg); font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--line); }
+.tabs button { font: 600 14px var(--body); color: var(--muted); background: none; border: 0; border-bottom: 2px solid transparent; padding: 8px 12px 10px; margin-bottom: -1px; cursor: pointer; }
+.tabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.tabs button:focus-visible, .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tabs .cnt, .chip span { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; margin-left: 3px; }
+[data-panel] { display: grid; gap: 14px; min-width: 0; }
+.media-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 600 12.5px var(--body); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.chip[aria-pressed="true"] span { color: var(--bg); opacity: 0.75; }
+.chip.copy { margin-left: auto; }
+.copy-msg { font-size: 12.5px; color: var(--muted); flex-basis: 100%; text-align: right; }
+.copy-msg:empty { display: none; }
+.mtype { display: inline-block; font: 600 11px var(--mono); color: var(--fg); border: 1px solid var(--line); border-radius: 4px; padding: 0 6px; white-space: nowrap; }
+table.media { min-width: 820px; }
+
+section.text { display: grid; gap: 16px; }
+h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 31px; line-height: 1.15; text-wrap: balance; }
+.lede { margin: -6px 0 0; color: var(--muted); max-width: 72ch; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 900px) { .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .grid3 { grid-template-columns: minmax(0, 1fr); } }
+.piece { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.piece.statement { border-top: 4px solid var(--c); border-radius: 0 0 8px 8px; }
+.piece .tag { font: 600 10.5px var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--c); }
+.piece h3 { margin: 0; font-size: 18px; font-weight: 600; }
+.piece.statement h3 { font-family: var(--display); font-weight: 400; font-size: 25px; }
+.piece p { margin: 0; color: var(--muted); font-size: 15px; }
+.piece .build { font-size: 14px; color: var(--fg); border-top: 1px dashed var(--line); padding-top: 8px; }
+.piece .build b { font: 600 10.5px var(--mono); color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-right: 6px; }
+.piece button { justify-self: start; font: 600 13px var(--body); color: var(--c); background: none; border: 1px solid var(--line); border-radius: 5px; padding: 5px 10px; cursor: pointer; }
+.piece button:hover { border-color: var(--c); }
+.piece button:focus-visible { outline: 2px solid var(--c); outline-offset: 2px; }
+.notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 28px; margin: 0; padding: 0; list-style: none; }
+@media (max-width: 700px) { .notes { grid-template-columns: minmax(0, 1fr); } }
+.notes li { padding: 12px 0; border-top: 1px solid var(--line); min-width: 0; font-size: 15px; color: var(--muted); }
+.notes li b { display: block; color: var(--fg); font-weight: 600; margin-bottom: 2px; }
+.changes { margin: 0; padding-left: 18px; color: var(--muted); display: grid; gap: 6px; max-width: 82ch; font-size: 15px; }
+.changes b { color: var(--fg); }
+.tw { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.tw table.mat td:first-child, .tw table.mat th:first-child { padding-left: 14px; }
+.say { font: 500 12.5px var(--mono); color: var(--accent); }
+.pend { display: inline-block; font: 600 10.5px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; padding: 0 6px; border-radius: 3px; border: 1px solid var(--accent); color: var(--accent); }
+.pill { display: inline-block; padding: 1px 9px; border-radius: 999px; color: #fff; font: 600 12px var(--mono); }
+.pill.ok { background: #2f8a55; } .pill.warn { background: #b7791f; } .pill.bad { background: #c0392b; }
+.r-c { --c: var(--riti); } .p-c { --c: var(--param); } .a-c { --c: var(--accent); }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<main class="wrap">
+  <header>
+    <p class="eyebrow">Light Beyond Lamps · Diwali 2026 · Section 2</p>
+    <h1>Riti &amp; Parampara<span>V3</span></h1>
+    <p class="intro">A 40 × 20 ft section in two halves. Riti, on the east, walks the sixteen samskaras along a lit timeline that wraps the walls. Parampara, on the west, shows six traditions that turn everyday acts into devotion and ends at a glowing map of Nilkanth Varni’s Tirth Yatra. Drag to orbit, scroll or pinch to zoom, right-drag or Shift-drag to pan, double-click a spot to zoom in, and click any piece. Walk around puts you at eye level, moving with WASD, the arrow keys or the on-screen pad.</p>
+    <p class="route"><i>Entry · south wall</i><i>→</i><b class="r">Riti 1–16</b><i>→</i><i>Our Journey wall</i><i>→</i><b class="p">Parampara P1–P6</b><i>→</i><i>Exit · west wall</i></p>
+  </header>
+
+  <section class="viewer-block" aria-label="3D model">
+    <div class="controls">
+      <div class="group" role="group" aria-label="Camera">
+        <button class="btn" id="vOverview" type="button" aria-pressed="true">Overview</button>
+        <button class="btn" id="vPlan" type="button" aria-pressed="false">Floor plan</button>
+        <button class="btn play" id="vWalk" type="button" aria-pressed="false">▶ Walk through</button>
+        <button class="btn" id="vRoam" type="button" aria-pressed="false">Walk around</button>
+        <button class="btn" id="v2d" type="button" aria-pressed="false">2D plan, materials + lighting</button>
+      </div>
+      <span class="sep" aria-hidden="true"></span>
+      <div class="group" role="group" aria-label="Go to">
+        <span class="glabel">Go to</span>
+        <button class="btn r-z" type="button" data-zone="riti">Riti</button>
+        <button class="btn p-z" type="button" data-zone="parampara">Parampara</button>
+      </div>
+      <span class="sep" aria-hidden="true"></span>
+      <div class="group" role="group" aria-label="Display">
+        <button class="btn" id="tWalls" type="button" aria-pressed="false">See-through walls</button>
+        <button class="btn" id="tLabels" type="button" aria-pressed="true">Labels</button>
+        <button class="btn" id="tLights" type="button" aria-pressed="true">Exhibit lighting</button>
+        <button class="btn" id="tDims" type="button" aria-pressed="false">Dimensions</button>
+        <button class="btn" id="tClear" type="button" aria-pressed="false">Walking space</button>
+        <button class="btn" id="tSpots" type="button" aria-pressed="false">Spot lights</button>
+        <button class="btn" id="tPath" type="button" aria-pressed="true">Visitor path</button>
+      </div>
+    </div>
+    <div class="viewer" id="viewer">
+      <canvas id="c" tabindex="0" aria-label="3D model of the Riti and Parampara section"></canvas>
+      <div id="labels"></div>
+      <div class="scale" id="scaleNote">1 grid = 1 ft · walls 8 ft</div>
+      <div class="hint" id="hint">Double-click a spot to zoom in · WASD to move · Q/E to turn</div>
+      <div class="zoomctl" id="zoomCtl"><button class="ib" id="zIn" type="button" aria-label="Zoom in">+</button><button class="ib" id="zOut" type="button" aria-label="Zoom out">−</button></div>
+      <div class="pad" id="pad" hidden>
+        <button class="ib" type="button" data-k="KeyW" aria-label="Walk forward">▲</button>
+        <button class="ib" type="button" data-k="ArrowLeft" aria-label="Turn left">◀</button>
+        <button class="ib" type="button" data-k="KeyS" aria-label="Walk back">▼</button>
+        <button class="ib" type="button" data-k="ArrowRight" aria-label="Turn right">▶</button>
+      </div>
+      <div class="tour" id="tour" hidden>
+        <button class="ib wide" id="tourPlay" type="button">Pause</button>
+        <input type="range" id="tourBar" min="0" max="1000" value="0" aria-label="Walk-through position">
+        <div class="stops" id="tourStops"></div>
+      </div>
+      <aside id="card" hidden aria-live="polite">
+        <button class="close" id="cardClose" type="button" aria-label="Close">×</button>
+        <span class="tag" id="cTag"></span>
+        <h3 id="cName"></h3>
+        <p id="cWhat"></p>
+        <dl><dt>Build</dt><dd id="cBuild"></dd><dt>Size</dt><dd id="cSize"></dd></dl>
+      </aside>
+      <div class="clear-legend" id="clearLegend" hidden><span><i class="sw g"></i>Clear walkway</span><span><i class="sw a"></i>People using it</span><span><i class="sw b"></i>Readers / viewers</span><span><i class="sw r"></i>Under 3′6″</span></div>
+      <div class="spot-legend" id="spotLegend" hidden><b id="spotCount">Spot lights</b><span>Numbers match the Lighting tab in the 2D view</span></div>
+      <div id="plan2d" hidden></div>
+      <div id="loading">Loading model…</div>
+    </div>
+  </section>
+
+  <section class="text">
+    <h2>Three statement pieces</h2>
+    <p class="lede">The three things people will remember. Everything else in each half supports them.</p>
+    <div class="grid3">
+      <article class="piece statement r-c">
+        <span class="tag">Riti · sixteen milestones</span>
+        <h3>The glowing samskara timeline</h3>
+        <p>A dark strip runs about 42 ft round the Riti walls with the six section names cut through it and lit from behind. Above it, sixteen cards each show one samskara: artwork, its name, how to say it, and what it means.</p>
+        <p class="build"><b>Build</b>2 in fire-rated foam or PVC strip, 9½ in tall, on 2½ in standoffs so it stands 4½ in off the wall at 4′4″–5′1″. White diffusion behind the letters, warm LED tape inside and along both edges. Cards 18 × 27 in, one clamp spot each.</p>
+        <button type="button" data-item="timeline">Show in model</button>
+      </article>
+      <article class="piece statement p-c">
+        <span class="tag">Parampara · light becomes knowledge</span>
+        <h3>The Arti alcove</h3>
+        <p>A dark recess on the south wall lit only by rows of diyas and the LED arti, the way arti began. Visitors step into the warm light, read the panel, and watch the arti.</p>
+        <p class="build"><b>Build</b>Two 4 ft plywood returns, a 1 ft valance and a black scrim canopy, painted near-black inside. Three diya steps and two side shelves hold about 47 LED diyas. Open at the front, no curtain.</p>
+        <button type="button" data-item="arti">Show in model</button>
+      </article>
+      <article class="piece statement p-c">
+        <span class="tag">Parampara · the journey</span>
+        <h3>Nilkanth Varni’s Tirth Yatra map</h3>
+        <p>A white cut-out of India and Nepal, almost 7 ft tall, glows against the north wall. A saffron line traces Nilkanth Varni’s seven-year route from Ayodhya to Loj, stop by stop.</p>
+        <p class="build"><b>Build</b>2 in white fire-rated foam cut on a CNC from a vector file, two sheets joined, on 4½ in standoffs with LED tape round the back edge. Route in saffron tape or vinyl. No spot on it, so the glow stays clean.</p>
+        <button type="button" data-item="map">Show in model</button>
+      </article>
+    </div>
+  </section>
+
+  <section class="text">
+    <h2>Supporting pieces</h2>
+    <div class="grid3">
+      <article class="piece r-c"><span class="tag">Riti</span><h3>Meaningful Name Studio</h3><p>Under cards 4–5 (Namakarana). Pick one of eight values, find a verified name card for it, and take home a one-week challenge.</p><button type="button" data-item="name">Show in model</button></article>
+      <article class="piece r-c"><span class="tag">Riti</span><h3>First Letters in Rice</h3><p>Under card 10 (Vidyarambha). Trace ॐ, a first letter or a value word in rice, then read why learning is sacred.</p><button type="button" data-item="rice">Show in model</button></article>
+      <article class="piece r-c"><span class="tag">Riti</span><h3>Our Journey Through Life</h3><p>A community mosaic on the south wall. Draw or write the chapter of life you are in now and add it to the grid.</p><button type="button" data-item="journey">Show in model</button></article>
+      <article class="piece p-c"><span class="tag">Parampara</span><h3>Puja and flower offering</h3><p>A puja panel with a small counter in front. If approved, visitors place a flower on the tray and reflect on gratitude.</p><button type="button" data-item="puja">Show in model</button></article>
+      <article class="piece p-c"><span class="tag">Parampara</span><h3>Thaal and Annakut</h3><p>Four quarter-round steps in the SW corner, laden with food offerings and a thaal on top, with the Thaal and Shabari panels behind.</p><button type="button" data-item="annakut">Show in model</button></article>
+      <article class="piece p-c"><span class="tag">Parampara</span><h3>Yoga</h3><p>A panel on the west wall: yoga as the union of body, mind, atma and God, not only postures.</p><button type="button" data-item="yoga">Show in model</button></article>
+      <article class="piece p-c"><span class="tag">Parampara</span><h3>Ahimsa Yagna</h3><p>An open, freestanding kund with a flickering LED flame. At its west face: offer a habit tile, open its virtue door, take a card.</p><button type="button" data-item="yagna">Show in model</button></article>
+      <article class="piece a-c"><span class="tag">Both halves</span><h3>Intro panels</h3><p>RITI greets visitors on the right as they enter; PARAMPARA sits on the divider’s west face.</p><button type="button" data-item="rintro">Show in model</button></article>
+      <article class="piece p-c"><span class="tag">Parampara</span><h3>Tirth Yatra panels</h3><p>Either side of the map: Nilkanth Varni’s pilgrimage, and “pilgrim or tourist?”.</p><button type="button" data-item="tirth">Show in model</button></article>
+    </div>
+  </section>
+
+  <section class="text">
+    <h2>Walking space</h2>
+    <p class="lede">Measured in the model at the places people pass, after taking out objects, people using a station, and people reading a wall. Turn on Walking space in the viewer to see the map. <span class="pill ok">5′+</span> two people pass · <span class="pill warn">3′6″–5′</span> one-way flow · <span class="pill bad">under 3′6″</span> pinch point.</p>
+    <div class="tw"><table class="mat" id="clearTable" style="min-width:520px"><tbody><tr><td>Measuring…</td></tr></tbody></table></div>
+  </section>
+
+  <section class="text">
+    <h2>Samskara card text</h2>
+    <p class="lede">Summarised from the lead packet, pp. 3–8. Pronunciations are a working guide <span class="pend">pending review</span> with Pujya Santo before print.</p>
+    <div class="tw"><table class="mat" id="tl"></table></div>
+  </section>
+
+  <section class="text">
+    <h2>Map stops</h2>
+    <p class="lede">A simplified route <span class="pend">to confirm</span>. The map includes Nepal so Muktinath (Pulhashram) sits on the glowing shape.</p>
+    <div class="tw"><table class="mat" id="stops" style="min-width:480px"></table></div>
+  </section>
+
+  <section class="text">
+    <h2>Notes before you build</h2>
+    <ul class="notes">
+      <li><b>Walls</b>½ in plywood in 4 × 8 ft modules on 2×4 frames, painted before setup, bolted together and braced with kickers and sandbags, since nothing screws into the gym floor. About 110 ft of outer wall plus the 8½ ft divider and the two Arti returns. Confirm which outer walls the hall or neighbouring sections already give you; each one you share saves its sheets.</li>
+      <li><b>Foam and fire safety</b>Plain EPS/XPS foam burns fast. Ask the venue first; most want fire-rated foam board or PVC sheet for the strip and map, flame-retardant plywood or FR paint for the walls, and FR fabric for the Annakut and the Arti canopy. All LEDs low-voltage.</li>
+      <li><b>Lighting</b>33 clamp-on LED spots at 3000K on the wall tops, one per card and panel, plus LED tape in the timeline and behind the map, and LED diyas in the alcove. Hall lights off; exit signs stay on. Run cords along the wall tops, one power strip per wall.</li>
+      <li><b>Arti alcove</b>The brief warns against darkened enclosed booths. Keep the front fully open, no curtain; only the top is covered. The diyas are display only, so it doesn’t repeat Jivan Shaili’s interactive diya; confirm with them.</li>
+      <li><b>Annakut</b>No barrier, so the bottom step sits at floor level beside the route. Use sealed or replica food for a multi-day run and keep small children back from it.</li>
+      <li><b>Ahimsa Yagna</b>No real flame, heat or smoke. Guard the tile slot so fingers can’t get trapped. Tile and virtue wording needs religious review.</li>
+      <li><b>Crowds</b>Name and Rice sit under their chapters, so the Riti centre stays open. Places where people stop (tables, the Journey wall, the Puja counter, the Yagna lectern) sit outside the walking line.</li>
+      <li><b>Reading direction</b>The route runs counter-clockwise from the SE entry, so visitors walk to their left along every wall and the timeline reads right to left. The card numbers keep the order clear; decide if that is acceptable before printing.</li>
+      <li><b>Approvals</b>Pending: Arti handling, the flower offering, name etymologies, Yagna tile pairings, card pronunciations and the map route.</li>
+      <li><b>Timeline</b>Order foam, prints, LED tape, spots and plywood in the first 3 days, since CNC cutting and printing take about a week. Week 2 is painting, setup and testing. The Media assets tab lists everything to make; give each item an owner this week.</li>
+    </ul>
+  </section>
+
+  <section class="text">
+    <h2>Checked against the lead packet and brief</h2>
+    <ul class="changes">
+      <li><b>Matches the lead summary:</b> one horizontal life-stage timeline showing all sixteen samskaras, a name-meaning activity, and the names and numbering from packet pp. 3–8 (13 shown as Keshanta · Ritusuddhi).</li>
+      <li><b>Not placed yet:</b> the crib, book and wedding knot from the lead summary. The open Riti centre has room for a crib near cards 4–5; small ledges under cards 10 and 15 would fit the book and the knot.</li>
+      <li><b>One difference from the brief:</b> the brief puts the Journey wall on the divider, away from the Riti–Parampara transition. This keeps your sketch’s south-wall position.</li>
+      <li><b>Sections are named by samskara number, not age,</b> since the brief says samskaras are not fixed-age buckets.</li>
+      <li><b>Parampara numbering</b> follows walking order (Arti, Puja, Thaal, Yoga, Yagna, Tirth Yatra), not the packet’s order.</li>
+      <li><b>Nilkanth Varni’s distance:</b> the packet says “more than 12,000 miles”; the figure usually cited is about 12,000 km (≈ 8,000 miles). Confirm before it goes on a panel.</li>
+      <li><b>Abhishek</b> is not built here; coordinate with Section 3 as the lead summary says.</li>
+    </ul>
+  </section>
+
+  <section class="text">
+    <h2>What changed in V3</h2>
+    <ul class="changes">
+      <li>The page now follows the Aadhar Stambh plan: walk-around mode, click-to-inspect cards, and a walk-through with stops.</li>
+      <li>Dimensions, a walking-space map with measured clear widths, and numbered spot lights can each be turned on over the model.</li>
+      <li>A 2D view with a dimensioned floor plan, a full shopping list (every 4 × 8 sheet, stud and light, exportable), pieces and sizes, media assets to make, and a numbered lighting plan.</li>
+      <li>The Yagna moved 10 in south so the aisle in front of the map clears about 4 ft.</li>
+    </ul>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const viewer = $('viewer'), canvas = $('c');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+  const scene = new THREE.Scene(); scene.background = new THREE.Color(0x0e0a09);
+  const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 500);
+  const maxAniso = renderer.capabilities.getMaxAnisotropy();
+  const EYE = 5.3, FD = 'Marcellus, Georgia, serif', FB = 'Mukta, system-ui, sans-serif';
+
+  // ---------- helpers ----------
+  function cv(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return [c, c.getContext('2d')]; }
+  function T(c) { const t = new THREE.CanvasTexture(c); t.anisotropy = maxAniso; return t; }
+  function wrap(g, text, x, y, mw, lh) { const ws = text.split(' '); let line = ''; for (const w of ws) { const t = line ? line + ' ' + w : w; if (g.measureText(t).width > mw && line) { g.fillText(line, x, y); y += lh; line = w; } else line = t; } if (line) g.fillText(line, x, y); return y + lh; }
+  const std = (c, o) => new THREE.MeshStandardMaterial(Object.assign({ color: c, roughness: 0.85 }, o || {}));
+  const MW = { wall: std(0x3b2c27), trim: std(0x231915), alc: std(0x1d100d) };
+  const SEE = [MW.wall, MW.trim, MW.alc];
+  const CLICK = [], SEGS = [], BOXES = [], CIRCS = [], WALLS = [];
+  let PARENT = scene;
+  function clickable(o, id) { o.traverse(m => { if (m.isMesh) { m.userData.item = id; CLICK.push(m); } }); return o; }
+  function grp(id, fn) { const g = new THREE.Group(), prev = PARENT; PARENT = g; fn(); PARENT = prev; scene.add(g); clickable(g, id); return g; }
+  function blk(x0, z0, x1, z1, h, mat, y) { const m = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, h, z1 - z0), mat && mat.isMaterial ? mat : std(mat)); m.position.set((x0 + x1) / 2, (y || 0) + h / 2, (z0 + z1) / 2); PARENT.add(m); return m; }
+  function wallSeg(a, b, mat) {
+    mat = mat || MW.wall; const dx = b[0] - a[0], dz = b[1] - a[1], len = Math.hypot(dx, dz);
+    const m = new THREE.Mesh(new THREE.BoxGeometry(len + 0.1, 8, 0.35), [mat, mat, MW.trim, MW.trim, mat, mat]);
+    m.position.set((a[0] + b[0]) / 2, 4, (a[1] + b[1]) / 2); m.rotation.y = Math.atan2(-dz, dx);
+    SEGS.push({ ax: a[0], az: a[1], bx: b[0], bz: b[1] }); WALLS.push([a, b]); scene.add(m); return m;
+  }
+  // wall faces: point on the face for coordinate a, and the inward normal
+  const F = { E: { p: a => [39.825, a], n: [-1, 0] }, N: { p: a => [a, 0.175], n: [0, 1] }, S: { p: a => [a, 19.825], n: [0, -1] }, W: { p: a => [0.175, a], n: [1, 0] }, Dv: { p: a => [21.375, a], n: [1, 0] }, DvW: { p: a => [21.025, a], n: [-1, 0] } };
+  const SG = { E: 1, N: 1, Dv: -1, DvW: 1, S: -1, W: -1 };
+  function put(m, f, a, y, off) { const w = F[f], [x, z] = w.p(a); m.position.set(x + w.n[0] * off, y, z + w.n[1] * off); m.rotation.y = Math.atan2(w.n[0], w.n[1]); PARENT.add(m); return m; }
+  function lpos(f, a, off) { const w = F[f], [x, z] = w.p(a); return [x + w.n[0] * off, z + w.n[1] * off]; }
+
+  // ---------- content ----------
+  const SK = [
+    [1, 'Garbhadhana', 'GARB-haa-DHAA-nah', '🤲', 'A couple’s prayerful intention to begin a family, preparing a loving, values-centred home before a child arrives.'],
+    [2, 'Pumsavana', 'POOM-sah-vah-nah', '🌱', 'Prayers early in pregnancy for the healthy growth of the child and the well-being of the mother.'],
+    [3, 'Simantonnayana', 'see-MAHN-toh-NAH-yah-nah', '🤰', 'Family gathers to bless the expectant mother, calm her mind and share the care she needs.'],
+    [4, 'Jatakarma', 'JAA-tah-KAR-mah', '👶', 'The newborn is welcomed with prayers, received as an atma entrusted to the family’s care.'],
+    [5, 'Namakarana', 'NAA-mah-KAH-rah-nah', '✨', 'The child receives a name that can link them to God, family heritage or a virtue to live by.'],
+    [6, 'Nishkramana', 'NISH-krah-mah-nah', '☀️', 'The baby’s first outing, to a mandir or under the open sky: a world beyond home.'],
+    [7, 'Annaprashana', 'UN-nah-PRAA-shah-nah', '🍚', 'The first bite of solid food, given with prayer, teaching gratitude for food from the start.'],
+    [8, 'Chudakarana', 'CHOO-dah-KAH-rah-nah', '✂️', 'The first haircut, a sign of renewal as the child grows into a new stage of life.'],
+    [9, 'Karnavedha', 'KAR-nah-VAY-dhah', '👂', 'Ear-piercing, a reminder to listen with patience and humility before wisdom can grow.'],
+    [10, 'Vidyarambha', 'VID-yaa-RUM-bhah', '✏️', 'The first step into learning, often writing a first letter or ॐ with prayers for wisdom.'],
+    [11, 'Upanayana', 'oo-pah-NAH-yah-nah', '🧵', 'Being “brought near” a guru: a life of discipline, prayer and responsible learning.'],
+    [12, 'Vedarambha', 'VAY-daa-RUM-bhah', '📖', 'Deeper study of scripture and values, aiming to live wisdom, not just memorise it.'],
+    [13, 'Keshanta · Ritusuddhi', 'KAY-shaan-tah · RI-too-SHOOD-dhee', '🌿', 'Entering adolescence, with honest guidance from elders as responsibility grows.'],
+    [14, 'Samavartana', 'SAH-mah-VAR-tah-nah', '🎓', 'Completing study and returning to society: now that you have learned, how will you live?'],
+    [15, 'Vivaha', 'vi-VAA-hah', '🔥', 'Two people and families unite before Agni; seven steps turn love into a shared commitment to dharma.'],
+    [16, 'Antyeshti', 'UN-tyesh-tee', '🪔', 'The final offering: the body is honoured, loved ones comforted, the eternal atma remembered.']];
+  const SEC = [
+    { n: 'BEFORE BIRTH', f: 'E', a: 17.6, b: 8.4, ids: [1, 2, 3], col: '#5b1a2a' },
+    { n: 'NEW LIFE & NAME', f: 'E', a: 8.0, b: 0.6, ids: [4, 5], col: '#6a2a1c' },
+    { n: 'FIRST STEPS', f: 'N', a: 39.4, b: 31.6, ids: [6, 7, 8, 9], col: '#6b4416' },
+    { n: 'LEARNING', f: 'N', a: 31.2, b: 22.0, ids: [10, 11, 12, 13, 14], col: '#294a3a' },
+    { n: 'MARRIAGE', f: 'Dv', a: 0.6, b: 4.2, ids: [15], col: '#7d1f33' },
+    { n: 'FAREWELL', f: 'Dv', a: 4.6, b: 8.2, ids: [16], col: '#3a2a4a' }];
+  const cardA = (sec, i) => { const L = Math.abs(sec.b - sec.a), d = Math.sign(sec.b - sec.a); return sec.a + d * (i + 0.5) * L / sec.ids.length; };
+  const MAPSTOPS = [['Ayodhya', 'Uttar Pradesh', 'Start, 1792 · age 11', 26.8, 82.2], ['Haridwar', 'Uttarakhand', '', 29.95, 78.16], ['Badrinath', 'Himalayas', '', 30.74, 79.49], ['Muktinath (Pulhashram)', 'Nepal', 'Tapas', 28.82, 83.87], ['Kamakhya', 'Assam', '', 26.17, 91.7], ['Jagannath Puri', 'Odisha', '', 19.81, 85.83], ['Venkatadri (Tirupati)', 'Andhra Pradesh', '', 13.68, 79.35], ['Shrirangam', 'Tamil Nadu', '', 10.86, 78.69], ['Rameshwaram', 'Tamil Nadu', '', 9.29, 79.31], ['Kanyakumari', 'Tamil Nadu', '', 8.08, 77.54], ['Pandharpur', 'Maharashtra', '', 17.68, 75.33], ['Nashik', 'Maharashtra', '', 20.0, 73.79], ['Loj', 'Saurashtra, Gujarat', 'End, 1799', 21.2, 70.25]];
+  const IND = [[23.6, 68.2], [24.3, 68.8], [24.3, 70.0], [25.0, 70.6], [26.2, 70.1], [27.0, 69.6], [28.0, 70.6], [28.9, 71.9], [30.0, 73.4], [30.9, 74.5], [32.0, 74.7], [32.7, 74.4], [33.4, 74.0], [34.3, 73.9], [34.9, 74.3], [35.4, 75.5], [35.9, 76.6], [35.6, 77.8], [34.6, 78.4], [33.6, 79.0], [32.6, 79.2], [31.5, 79.2], [30.9, 80.0], [30.2, 80.9], [30.4, 81.5], [29.6, 82.5], [29.2, 83.6], [28.5, 84.5], [28.2, 85.7], [27.9, 86.9], [27.9, 88.2], [28.1, 88.7], [27.2, 88.9], [26.8, 89.8], [26.8, 92.0], [27.8, 91.7], [28.3, 93.4], [29.2, 94.6], [29.4, 95.9], [28.3, 97.3], [27.3, 96.9], [26.6, 95.8], [25.3, 94.6], [24.0, 94.2], [23.0, 93.4], [22.0, 92.9], [22.2, 92.4], [23.7, 91.8], [24.1, 92.2], [24.9, 91.9], [25.2, 90.1], [25.6, 89.8], [26.1, 89.6], [25.3, 88.5], [24.6, 88.1], [23.7, 88.8], [22.6, 88.9], [21.6, 88.6], [21.6, 87.2], [20.7, 86.9], [19.9, 86.1], [19.2, 84.9], [18.2, 84.0], [17.3, 83.0], [16.4, 81.7], [15.8, 80.9], [15.1, 80.1], [13.6, 80.3], [12.5, 80.2], [11.3, 79.8], [10.3, 79.9], [9.4, 79.2], [8.9, 78.3], [8.1, 77.5], [8.6, 76.9], [9.8, 76.3], [11.0, 75.8], [12.3, 75.0], [13.6, 74.6], [14.8, 74.1], [15.9, 73.6], [17.4, 73.2], [18.9, 72.8], [20.2, 72.8], [21.0, 72.7], [22.2, 72.6], [21.8, 72.1], [21.1, 71.5], [20.8, 70.9], [21.3, 70.0], [21.9, 69.2], [22.4, 69.1], [22.7, 70.3], [23.0, 70.4], [22.9, 69.3], [23.0, 68.5]];
+
+  const ZC = { Riti: '#e48298', Parampara: '#e7a75a', Route: '#e2b45e' };
+  const ITEMS = {
+    entry: { zone: 'Route', name: 'Entry', what: 'Visitors arrive through the south wall near the SE corner and face north up the east wall, where the Riti timeline begins.', build: 'A 5 ft opening in the south wall, finished on both sides.', size: '5 ft opening', at: [34, 20.4], view: 0 },
+    exit: { zone: 'Route', name: 'Exit', what: 'The end of the section, on the west wall near the NW corner, right after the Tirth Yatra map.', build: 'A 4½ ft opening in the west wall.', size: '4½ ft opening', at: [-0.4, 3.75], view: Math.PI / 2 },
+    rintro: { zone: 'Riti', name: 'Riti intro panel', what: 'The first thing on the right as people enter: RITI, “Sixteen Milestones. One Sacred Journey.”, and the key message from the lead packet. The PARAMPARA intro panel does the same job on the divider’s west face.', build: 'Printed panel 1.8 × 5 ft on the east wall, one clamp spot from the wall top.', size: '1.8 × 5 ft, 2′6″–7′6″ up', at: [39.4, 18.7], view: -Math.PI / 2 },
+    timeline: { zone: 'Riti', name: 'Samskara timeline', what: 'A dark strip wraps the Riti walls in walking order: east wall, north wall, then the divider. The six section names are cut through it and glow. Above it, a card for each of the sixteen samskaras gives artwork, the name, how to say it, and what it means.', build: '2 in fire-rated foam or PVC strip 9½ in tall on 2½ in standoffs (4½ in off the wall), letters cut through and backed with white diffusion, 3000K LED tape inside and along both edges to wash the wall. Cards 18 × 27 in, 5′3″–7′6″ up, one clamp spot each.', size: 'About 42 ft run; strip 4′4″–5′1″ up', at: [36, 4], view: -0.6 },
+    name: { zone: 'Riti', name: 'Meaningful Name Studio', what: 'Under cards 4–5 (Namakarana). Visitors pick one of eight values on the wall panel, find a verified name card for it, read its meaning, and take home a one-week challenge. No names or personal data are collected.', build: '4 × 2 ft folding table with a skirt against the east wall, 8-value panel 3.6 × 1.1 ft on the wall above it (under the strip), card organizers. One clamp spot on the table. One volunteer.', size: '4 × 2 ft, 3 ft high; 2 positions', at: [38.8, 4.6], view: -Math.PI / 2 },
+    rice: { zone: 'Riti', name: 'First Letters in Rice', what: 'Under card 10 (Vidyarambha). Trace ॐ, a first letter or a value word in a rice tray, then read: what we learn should shape how we live.', build: '4 × 2 ft folding table against the north wall, two trays about 12 × 16 in, laminated guides on a 3.6 × 1.1 ft wall panel, paddles, wipes, dustpan, a “not for eating” sign. One clamp spot.', size: '4 × 2 ft, 3 ft high; 2 positions', at: [30.3, 1.2], view: 0 },
+    journey: { zone: 'Riti', name: 'Our Journey Through Life', what: 'The last stop in Riti. Visitors draw or write the chapter of life they are in now and stick it on the community grid. No names or personal information.', build: 'Grid board 5 × 4 ft on the south wall, ¾ in ledge 15 in deep at 3 ft on brackets, 200 cardstock squares, tethered washable markers, hook-and-loop dots. Two clamp spots.', size: '5 ft of wall; 2–3 writers', at: [26, 19.4], view: Math.PI },
+    pintro: { zone: 'Parampara', name: 'Parampara intro panel', what: 'PARAMPARA, “Ancient Practices. Living Purpose.”: eating becomes gratitude, travelling becomes inner discovery, light becomes knowledge, fire becomes selfless sacrifice, movement becomes mastery of the mind.', build: 'Printed panel 7.4 × 5 ft on the divider’s west face, two clamp spots on the divider top.', size: '7.4 × 5 ft, 2′6″–7′6″ up', at: [20.8, 4.3], view: -Math.PI / 2 },
+    arti: { zone: 'Parampara', name: 'Arti alcove', what: 'A dark recess lit only by diyas, the way arti began. An LED arti glows on a pedestal in front of rows of diyas, with a dark panel: “Arti does not only place light before God; it asks us to carry God’s light into the way we live.” Visitors watch; holding the arti with a volunteer only if approved.', build: 'Two 4 ft plywood returns, 1 ft valance at 7–8 ft, black FR scrim canopy, inside painted near-black. Three diya steps (1 ft, 1′7″, 2′2″) and two side shelves (4′5″, 5′5″) with about 47 LED diyas. LED arti on a 3 ft pedestal. No spots.', size: '4′5″ wide inside × 4 ft deep, 8 ft high', at: [17.5, 18], view: 0 },
+    puja: { zone: 'Parampara', name: 'Puja and flower offering', what: 'A puja panel with a small counter in front. If approved, visitors place a reusable flower on the tray and quietly name one thing they are grateful for.', build: 'Printed panel 5.3 × 4.4 ft on the south wall; ¾ in plywood counter 3.5 × 1.5 × 3 ft; approved tray and devotional image. Two clamp spots.', size: '5.3 ft of wall; 1 position', at: [11.05, 18.6], view: 0 },
+    annakut: { zone: 'Parampara', name: 'Thaal and Annakut', what: 'Four quarter-round steps fill the SW corner, every step laden with food offerings and a thaal on top. Behind them, the Thaal panel (eating becomes gratitude) and Shabari’s “Bhav, not price”.', build: 'Quarter-round tiers of ¾ in plywood on 2×4 ribs with ¼ in bending-ply risers, covered in burgundy FR fabric with gold trim. About 60 food items. Two panels about 5 × 4 ft at 3′6″–7′6″, one spot each in warm 2700K.', size: '5 ft radius; steps 8 in to 2′10″ high', at: [2.6, 17.2], view: -0.8 },
+    yoga: { zone: 'Parampara', name: 'Yoga', what: 'Yoga as union of body, mind, atma and God: karma, bhakti, gyan and raja yoga, with Arjuna’s lesson: “Yoga is not only the ability to hold a difficult pose; it is the ability to hold onto one’s values in a difficult moment.”', build: 'Printed panel 6 × 5 ft on the west wall, two clamp spots.', size: '6 ft of wall', at: [0.6, 9.9], view: Math.PI / 2 },
+    yagna: { zone: 'Parampara', name: 'Ahimsa Yagna', what: 'An open kund with a flickering LED flame. At its west face visitors pick one of six habit tiles, offer it through the slot, open the matching virtue door, and take a card with one action for the week.', build: 'Faux-stone painted ¾ in plywood base 4 × 4 × 1 ft with a raised 3 × 3 ft step; low-voltage LED flame with silk and fan; a 3 ft lectern on the west face with tile tray, guarded slot, catch drawer and 6 hinged reveal doors. Two narrow spots from the north wall top.', size: '4 × 4 ft plus 1 ft lectern; 1 position', at: [12.4, 9.1], view: 0.9 },
+    map: { zone: 'Parampara', name: 'Tirth Yatra map', what: 'A white cut-out of India and Nepal glows on the north wall with Nilkanth Varni’s route from Ayodhya (1792) through the Himalayas, Nepal, Assam, Puri and the far south, up the west coast to Loj (1799).', build: '2 in white fire-rated foam, CNC cut from a vector file, two sheets joined vertically, on 4½ in standoffs with warm LED tape round the back edge. Route in saffron tape or vinyl, stop dots, start and end larger. No spot.', size: '5′10″ × 6′7″, 1′–7′7″ up', at: [13.6, 0.6], view: 0 },
+    tirth: { zone: 'Parampara', name: 'Tirth Yatra panels', what: 'Left of the map: Nilkanth Varni’s pilgrimage, 1792–1799. Right: “A tourist asks, ‘What did I see?’ A pilgrim also asks, ‘How did the journey change me?’”', build: 'Two printed panels 2.6 × 5 and 2.8 × 5 ft, one clamp spot each.', size: '2.6 and 2.8 ft of wall', at: [9, 0.6], view: 0 }
+  };
+  SEC.forEach((s, i) => {
+    const L = Math.abs(s.b - s.a), mid = (s.a + s.b) / 2, [x, z] = lpos(s.f, mid, 0.4);
+    ITEMS['sec' + i] = { zone: 'Riti', name: `${s.ids[0]}${s.ids.length > 1 ? '–' + s.ids[s.ids.length - 1] : ''} · ${s.n.charAt(0) + s.n.slice(1).toLowerCase()}`, what: s.ids.map(id => `${SK[id - 1][1]} (${SK[id - 1][2]})`).join(' · ') + '.', build: `${L.toFixed(1)} ft of strip with “${s.n}” cut through it; ${s.ids.length} card${s.ids.length > 1 ? 's' : ''} 18 × 27 in above, each with its own clamp spot.`, size: `${L.toFixed(1)} ft of ${s.f === 'E' ? 'east wall' : s.f === 'N' ? 'north wall' : 'divider'}`, at: [x, z], view: s.f === 'E' ? -Math.PI / 2 : s.f === 'N' ? 0 : Math.PI / 2 };
+  });
+  const LABELS = [['rintro', 'Riti intro', 8.4], ['sec0', '1–3 Before Birth', 8.6], ['sec1', '4–5 New Life & Name', 8.6], ['sec2', '6–9 First Steps', 8.6], ['sec3', '10–14 Learning', 8.6], ['sec4', '15 Marriage', 8.6], ['sec5', '16 Farewell', 8.6], ['name', 'Name Studio', 4.2], ['rice', 'First Letters in Rice', 4.2], ['journey', 'Our Journey wall', 7.4], ['pintro', 'Parampara intro', 8.4], ['arti', 'P1 · Arti alcove', 8.6], ['puja', 'P2 · Puja', 8.2], ['annakut', 'P3 · Thaal · Annakut', 5.0], ['yoga', 'P4 · Yoga', 8.2], ['yagna', 'P5 · Ahimsa Yagna', 5.2], ['map', 'P6 · Tirth Yatra map', 8.6], ['tirth', 'Tirth Yatra panels', 8.2]];
+
+  // ---------- floor ----------
+  function floorRect(x0, z0, x1, z1, mat, y) { const m = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, z1 - z0), mat); m.rotation.x = -Math.PI / 2; m.position.set((x0 + x1) / 2, y || 0, (z0 + z1) / 2); scene.add(m); return m; }
+  function buildFloor() {
+    const [c, g] = cv(256, 256); g.fillStyle = '#2d2420'; g.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 16; i++) { g.fillStyle = i % 2 ? 'rgba(255,220,180,0.035)' : 'rgba(0,0,0,0.05)'; g.fillRect(0, i * 16, 256, 16); }
+    const t = T(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(8, 8);
+    floorRect(0, 0, 40, 20, std(0xffffff, { map: t, roughness: 0.9 }));
+    const apron = std(0x0b0807, { roughness: 1 });
+    floorRect(-12, -10, 52, 0, apron, -0.01); floorRect(-12, 20, 52, 32, apron, -0.01); floorRect(-12, 0, 0, 20, apron, -0.01); floorRect(40, 0, 52, 20, apron, -0.01);
+    const tint = (x0, z0, x1, z1, col) => floorRect(x0, z0, x1, z1, new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.09, depthWrite: false }), 0.006);
+    tint(21.2, 0, 40, 20, 0xb0304e); tint(0, 0, 21.2, 20, 0xc98a2a);
+    const pts = []; for (let x = 0; x <= 40; x++) pts.push(x, 0, 0, x, 0, 20); for (let z = 0; z <= 20; z++) pts.push(0, 0, z, 40, 0, z);
+    const gg = new THREE.BufferGeometry(); gg.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+    const grid = new THREE.LineSegments(gg, new THREE.LineBasicMaterial({ color: 0x4a3a32, transparent: true, opacity: 0.5 })); grid.position.y = 0.012; scene.add(grid);
+  }
+  function buildWalls() {
+    wallSeg([0, 0], [40, 0]); wallSeg([40, 0], [40, 20]);
+    wallSeg([0, 20], [31.5, 20]); wallSeg([36.5, 20], [40, 20]);
+    wallSeg([0, 0], [0, 1.5]); wallSeg([0, 6], [0, 20]);
+    wallSeg([21.2, 0], [21.2, 8.5]);
+    wallSeg([15.1, 16], [15.1, 20], MW.alc); wallSeg([19.9, 16], [19.9, 20], MW.alc);
+  }
+
+  // ---------- glow and printed surfaces ----------
+  const glowMats = [], haloMats = [];
+  let poolMat;
+  function haloTex() { const [c, g] = cv(256, 256); const gr = g.createLinearGradient(0, 0, 0, 256); gr.addColorStop(0, 'rgba(255,170,80,0)'); gr.addColorStop(0.38, 'rgba(255,186,105,.55)'); gr.addColorStop(0.5, 'rgba(255,205,140,.9)'); gr.addColorStop(0.62, 'rgba(255,186,105,.55)'); gr.addColorStop(1, 'rgba(255,170,80,0)'); g.fillStyle = gr; g.fillRect(0, 0, 256, 256); g.globalCompositeOperation = 'destination-in'; const h = g.createLinearGradient(0, 0, 256, 0); h.addColorStop(0, 'rgba(0,0,0,0)'); h.addColorStop(0.06, '#000'); h.addColorStop(0.94, '#000'); h.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = h; g.fillRect(0, 0, 256, 256); return T(c); }
+  function addMat(o, day, night) { const m = new THREE.MeshBasicMaterial(Object.assign({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: night }, o)); haloMats.push([m, day, night]); return m; }
+  function emis(t, day, night) { const m = new THREE.MeshStandardMaterial({ map: t, emissive: 0xffffff, emissiveMap: t, emissiveIntensity: night, roughness: 0.75 }); glowMats.push([m, day, night]); return m; }
+  function stripTex(sec, L) {
+    const ppf = 150, w = Math.round(L * ppf), h = Math.round(0.8 * ppf); const [c, g] = cv(w, h);
+    g.fillStyle = '#1b120f'; g.fillRect(0, 0, w, h); g.fillStyle = '#2b1c17'; g.fillRect(0, 0, w, 4); g.fillRect(0, h - 4, w, 4);
+    const sgn = SG[sec.f], ac = (sec.a + sec.b) / 2;
+    g.strokeStyle = 'rgba(255,214,150,.85)'; g.lineWidth = 4; g.shadowColor = 'rgba(255,190,110,1)'; g.shadowBlur = 10;
+    sec.ids.forEach((id, i) => { const u = 0.5 + (cardA(sec, i) - ac) * sgn / L; g.beginPath(); g.moveTo(u * w, 4); g.lineTo(u * w, h * 0.16); g.stroke(); });
+    g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = `400 ${Math.round(h * 0.46)}px ${FD}`; g.fillStyle = '#fff2d4'; g.shadowBlur = 22;
+    const t = sec.n.split('').join(' '); g.fillText(t, w / 2, h * 0.56); g.fillText(t, w / 2, h * 0.56); return T(c);
+  }
+  function cardTex(s, col) {
+    const [c, g] = cv(400, 600); g.fillStyle = '#1c120f'; g.fillRect(0, 0, 400, 600);
+    const gr = g.createLinearGradient(0, 0, 0, 310); gr.addColorStop(0, col); gr.addColorStop(1, '#241612'); g.fillStyle = gr; g.fillRect(14, 14, 372, 300);
+    g.font = '130px serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(s[3], 200, 168);
+    g.fillStyle = '#d9a957'; g.beginPath(); g.arc(52, 52, 26, 0, 7); g.fill(); g.fillStyle = '#1c120f'; g.font = `700 26px ${FB}`; g.fillText(s[0], 52, 54);
+    g.textBaseline = 'alphabetic'; g.fillStyle = '#fff1d6'; g.font = `400 ${s[1].length > 14 ? 30 : 38}px ${FD}`; g.fillText(s[1], 200, 366);
+    g.fillStyle = '#e0b25e'; g.font = `500 ${s[2].length > 24 ? 17 : 21}px ${FB}`; g.fillText(s[2], 200, 400);
+    g.fillStyle = '#e8dac6'; g.font = `400 21px ${FB}`; wrap(g, s[4], 200, 444, 350, 27); return T(c);
+  }
+  function panelTex(wf, hf, o) {
+    const ppf = 110, w = Math.round(wf * ppf), h = Math.round(hf * ppf), s = Math.min(h, w * 1.35); const [c, g] = cv(w, h);
+    g.fillStyle = o.dark ? '#1a100d' : '#f3e6d1'; g.fillRect(0, 0, w, h); g.fillStyle = o.band; g.fillRect(0, 0, w, s * 0.2); g.fillStyle = '#d9b26a'; g.fillRect(0, s * 0.2, w, s * 0.012);
+    g.textAlign = 'center'; g.fillStyle = '#fff3dc'; g.font = `400 ${s * 0.075}px ${FD}`; g.fillText(o.t, w / 2, s * 0.105);
+    g.fillStyle = '#f0d9a8'; g.font = `500 ${s * 0.036}px ${FB}`; g.fillText(o.sub || '', w / 2, s * 0.165);
+    let y = s * 0.27; if (o.ic) { g.font = `${s * 0.12}px serif`; g.textBaseline = 'middle'; g.fillText(o.ic, w / 2, s * 0.32); g.textBaseline = 'alphabetic'; y = s * 0.45; }
+    g.fillStyle = o.dark ? '#f0c878' : '#5a1828'; g.font = `500 ${s * 0.042}px ${FB}`; y = wrap(g, o.msg, w / 2, y, w * 0.84, s * 0.054);
+    if (o.body) { g.fillStyle = o.dark ? '#d9c7ae' : '#5b4a40'; g.font = `400 ${s * 0.032}px ${FB}`; wrap(g, o.body, w / 2, y + s * 0.02, w * 0.84, s * 0.043); }
+    return T(c);
+  }
+  function panel(f, a0, a1, y0, y1, o) {
+    const L = Math.abs(a1 - a0), h = y1 - y0, ac = (a0 + a1) / 2, t = panelTex(L, h, o);
+    put(new THREE.Mesh(new THREE.PlaneGeometry(L, h), emis(t, 0.04, o.dark ? 0.35 : 0.1)), f, ac, (y0 + y1) / 2, 0.06);
+    put(new THREE.Mesh(new THREE.BoxGeometry(L + 0.1, h + 0.1, 0.05), std(0x3a2620)), f, ac, (y0 + y1) / 2, 0.025);
+  }
+  function chipPanel(f, a, words, band) {
+    const [c, g] = cv(720, 220); g.fillStyle = band; g.fillRect(0, 0, 720, 220); g.textAlign = 'center'; g.textBaseline = 'middle';
+    words.forEach((wd, i) => { const col = i % 4, row = Math.floor(i / 4), x = 18 + col * 174, y = 26 + row * 92; g.fillStyle = '#f6ead6'; g.fillRect(x, y, 160, 74); g.fillStyle = '#3a1a20'; g.font = `600 ${wd.length > 9 ? 22 : 28}px ${FB}`; g.fillText(wd, x + 80, y + 38); });
+    put(new THREE.Mesh(new THREE.PlaneGeometry(3.6, 1.1), emis(T(c), 0.04, 0.15)), f, a, 3.6, 0.04);
+  }
+
+  // ---------- Riti ----------
+  function buildRiti(hT) {
+    grp('rintro', () => panel('E', 17.8, 19.6, 2.5, 7.5, { band: '#7d1f33', t: 'RITI', sub: 'Rites · Shodasha Samskaras', ic: '🪷', msg: 'Sixteen Milestones. One Sacred Journey.', body: 'Every ritual is a reminder of our duties, our relationships, and our connection to something greater.' }));
+    SEC.forEach((sec, si) => grp('sec' + si, () => {
+      const L = Math.abs(sec.b - sec.a), ac = (sec.a + sec.b) / 2, t = stripTex(sec, L), side = std(0x1b120f);
+      put(new THREE.Mesh(new THREE.BoxGeometry(L, 0.8, 0.375), [side, side, side, side, emis(t, 0.5, 1.25), side]), sec.f, ac, 4.7, 0.1875);
+      put(new THREE.Mesh(new THREE.PlaneGeometry(L + 0.8, 3.2), addMat({ map: hT }, 0.25, 1)), sec.f, ac, 4.7, 0.015);
+      sec.ids.forEach((id, i) => {
+        const a = cardA(sec, i);
+        put(new THREE.Mesh(new THREE.PlaneGeometry(1.5, 2.25), emis(cardTex(SK[id - 1], sec.col), 0.12, 0.42)), sec.f, a, 6.375, 0.09);
+        put(new THREE.Mesh(new THREE.BoxGeometry(1.58, 2.33, 0.06), std(0x120b09)), sec.f, a, 6.375, 0.05);
+        put(new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.18, 0.05), std(0x8a6a3a)), sec.f, a, 5.18, 0.1);
+      });
+    }));
+    grp('name', () => {
+      blk(37.8, 2.6, 39.8, 6.6, 0.12, 0x3f7a5a, 2.8); blk(37.85, 2.65, 39.75, 6.55, 2.8, 0xe9dcc6);
+      chipPanel('E', 4.6, ['Compassion', 'Truth', 'Courage', 'Humility', 'Devotion', 'Peace', 'Service', 'Steadfast'], '#7d1f33');
+    });
+    grp('rice', () => {
+      blk(28.3, 0.2, 32.3, 2.2, 0.12, 0x3f7a5a, 2.8); blk(28.35, 0.25, 32.25, 2.15, 2.8, 0xe9dcc6);
+      blk(28.7, 0.5, 30.0, 1.6, 0.1, 0xf6f0e2, 2.92); blk(30.6, 0.5, 31.9, 1.6, 0.1, 0xf6f0e2, 2.92);
+      chipPanel('N', 30.3, ['ॐ', 'अ', 'क', 'seva', 'shanti', 'satya', 'A', 'trace'], '#8a5d18');
+    });
+    grp('journey', () => {
+      const [c, g] = cv(500, 400); g.fillStyle = '#f3e6d1'; g.fillRect(0, 0, 500, 400); g.fillStyle = '#7d1f33'; g.fillRect(0, 0, 500, 70); g.fillStyle = '#fff3dc'; g.font = `400 30px ${FD}`; g.textAlign = 'center'; g.fillText('Our Journey Through Life', 250, 46);
+      const cs = ['#e8c27a', '#d98f8f', '#9ec3a6', '#a8b9dc', '#e3d3b3', '#f0e6d6']; for (let r = 0; r < 6; r++) for (let k = 0; k < 11; k++) { if ((r * 7 + k * 5) % 9 < 5) { g.fillStyle = cs[(r * 7 + k * 3) % 6]; g.fillRect(18 + k * 43, 90 + r * 48, 38, 40); } else { g.strokeStyle = '#d8c8b0'; g.strokeRect(18 + k * 43, 90 + r * 48, 38, 40); } }
+      put(new THREE.Mesh(new THREE.PlaneGeometry(5, 4), emis(T(c), 0.04, 0.12)), 'S', 26, 4.5, 0.05);
+      blk(23.5, 18.55, 28.5, 19.8, 0.12, 0x6b4a2e, 2.88);
+    });
+    BOXES.push({ cx: 38.8, cz: 4.6, hx: 1, hz: 2 }, { cx: 30.3, cz: 1.2, hx: 2, hz: 1 }, { cx: 26, cz: 19.2, hx: 2.5, hz: 0.62 });
+    BOXES.push({ cx: 39.64, cz: 9.1, hx: 0.19, hz: 8.5 }, { cx: 30.7, cz: 0.36, hx: 8.7, hz: 0.19 }, { cx: 21.56, cz: 4.4, hx: 0.19, hz: 3.8 });
+  }
+
+  // ---------- Parampara ----------
+  const diyaMats = [0, 1, 2].map(() => new THREE.MeshBasicMaterial({ color: 0xffa040 }));
+  let diyaN = 0, alcL = null, flame = null, flameL = null;
+  function buildParampara() {
+    grp('pintro', () => panel('DvW', 0.6, 8.0, 2.5, 7.5, { band: '#8a5d18', t: 'PARAMPARA', sub: 'Traditions · Ancient Practices. Living Purpose.', ic: '🕉️', msg: 'Hindu traditions turn everyday acts into devotion.', body: 'Eating becomes gratitude. Traveling becomes inner discovery. Light becomes knowledge. Fire becomes selfless sacrifice. Movement becomes mastery of the mind.' }));
+    grp('arti', () => {
+      blk(14.95, 15.85, 20.05, 16.25, 1, MW.trim, 7); blk(15.27, 16.2, 19.73, 19.8, 0.06, 0x0c0706, 7.94);
+      put(new THREE.Mesh(new THREE.PlaneGeometry(4.45, 8), MW.alc), 'S', 17.5, 4, 0.012);
+      panel('S', 15.6, 19.4, 3.6, 7.0, { dark: 1, band: '#4a1a22', t: 'ARTI', sub: 'Light → Knowledge', msg: 'Arti does not only place light before God; it asks us to carry God’s light into the way we live.', body: 'Tamaso ma jyotir gamaya: lead me from darkness to light.' });
+      [[18.4, 1.0], [18.8, 1.6], [19.2, 2.2]].forEach(([z, y]) => blk(15.3, z, 19.7, 19.8, y, 0x3a1f1a));
+      const dB = new THREE.SphereGeometry(0.09, 10, 6, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), dF = new THREE.ConeGeometry(0.035, 0.12, 6), dBM = std(0x8a4a2a);
+      const diya = (x, y, z) => { const b = new THREE.Mesh(dB, dBM); b.position.set(x, y + 0.09, z); PARENT.add(b); const fm = new THREE.Mesh(dF, diyaMats[diyaN++ % 3]); fm.position.set(x, y + 0.16, z); PARENT.add(fm); };
+      [[18.6, 1.0], [19.0, 1.6], [19.5, 2.2]].forEach(([z, y]) => { for (let i = 0; i < 9; i++) diya(15.55 + i * 0.5, y, z); });
+      [[15.275, 1], [19.725, -1]].forEach(([x, s]) => [4.4, 5.4].forEach(y => { blk(Math.min(x, x + s * 0.6), 16.6, Math.max(x, x + s * 0.6), 19.0, 0.06, 0x3a1f1a, y); for (let i = 0; i < 5; i++) diya(x + s * 0.3, y + 0.06, 16.9 + i * 0.5); }));
+      blk(16.9, 17.2, 18.1, 18.2, 3, 0x3a1f1a);
+      const ar = new THREE.Mesh(new THREE.SphereGeometry(0.16, 16, 12), new THREE.MeshBasicMaterial({ color: 0xffb347 })); ar.position.set(17.5, 3.2, 17.7); PARENT.add(ar);
+    });
+    alcL = new THREE.PointLight(0xff9440, 0.9, 7); alcL.position.set(17.5, 2.6, 18.4); scene.add(alcL);
+    BOXES.push({ cx: 17.5, cz: 19.1, hx: 2.2, hz: 0.7 }, { cx: 17.5, cz: 17.7, hx: 0.6, hz: 0.5 });
+    grp('puja', () => {
+      panel('S', 8.4, 13.7, 3.2, 7.6, { band: '#8a5d18', t: 'PUJA', sub: 'Worship → Transformation', ic: '🌼', msg: 'We may begin puja asking God to change our circumstances, but sincere puja gradually changes us.' });
+      blk(9.3, 18.3, 12.8, 19.8, 3, 0x6b4a2e);
+      const tr = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 0.05, 24), std(0xd8b25a, { metalness: 0.6, roughness: 0.3 })); tr.position.set(11.05, 3.03, 19.05); PARENT.add(tr);
+      [[10.8, 19], [11.2, 18.9], [11.05, 19.25], [11.35, 19.15]].forEach(([x, z], i) => { const f = new THREE.Mesh(new THREE.SphereGeometry(0.09, 10, 8), std([0xf2a33a, 0xe8c25a, 0xd35400, 0xffd54f][i])); f.position.set(x, 3.12, z); PARENT.add(f); });
+    });
+    BOXES.push({ cx: 11.05, cz: 19.05, hx: 1.75, hz: 0.75 });
+    grp('annakut', () => {
+      panel('S', 0.4, 5.5, 3.5, 7.5, { band: '#8a5d18', t: 'BHAV, NOT PRICE', sub: 'Shabari’s offering', msg: 'The value of an offering is not measured by what is on the plate, but by what is in the heart.' });
+      panel('W', 14.4, 19.6, 3.5, 7.5, { band: '#8a5d18', t: 'THAAL', sub: 'Eating → Gratitude', ic: '🍛', msg: 'Food offered first to God becomes prasad, received with gratitude.' });
+      const CX = 0.18, CZ = 19.82, tiers = [[5, 0.7], [3.9, 1.4], [2.8, 2.1], [1.7, 2.8]];
+      tiers.forEach(([r, h], i) => {
+        const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, 36, 1, false, Math.PI / 2, Math.PI / 2), std(i % 2 ? 0x8a2236 : 0x7d1f33)); m.position.set(CX, h / 2, CZ); PARENT.add(m);
+        const e = new THREE.Mesh(new THREE.CylinderGeometry(r + 0.01, r + 0.01, 0.06, 36, 1, true, Math.PI / 2, Math.PI / 2), std(0xd9b25a, { metalness: 0.5, roughness: 0.4 })); e.position.set(CX, h - 0.03, CZ); PARENT.add(e);
+      });
+      const fG = [new THREE.CylinderGeometry(0.2, 0.14, 0.12, 12), new THREE.SphereGeometry(0.1, 10, 8), new THREE.SphereGeometry(0.17, 12, 8), new THREE.ConeGeometry(0.16, 0.3, 10)];
+      const fC = [0xf2a33a, 0xe8c25a, 0xc0392b, 0x7cb342, 0xf5e6c8, 0xd35400, 0x8e5a2b, 0xffd54f].map(c => std(c, { roughness: 0.6 }));
+      let sd = 7; const rnd = () => (sd = (sd * 9301 + 49297) % 233280) / 233280;
+      tiers.forEach(([r, h], i) => { const r0 = i < 3 ? tiers[i + 1][0] : 0, rm = (r + r0) / 2 + (i < 3 ? 0 : 0.2), n = Math.max(3, Math.floor(rm * Math.PI / 2 / 0.42)); for (let k = 0; k < n; k++) { const p = (k + 0.5) / n * Math.PI / 2, gi = Math.floor(rnd() * 4), m = new THREE.Mesh(fG[gi], fC[Math.floor(rnd() * 8)]); m.position.set(CX + rm * Math.sin(p), h + [0.06, 0.1, 0.12, 0.15][gi], CZ - rm * Math.cos(p)); if (gi === 2) m.scale.y = 0.7; PARENT.add(m); } });
+      const th = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 0.05, 28), std(0xd8b25a, { metalness: 0.6, roughness: 0.3 })); th.position.set(0.75, 2.83, 19.25); PARENT.add(th);
+    });
+    CIRCS.push({ cx: 0.18, cz: 19.82, r: 5 });
+    grp('yoga', () => panel('W', 6.9, 12.9, 2.5, 7.5, { band: '#8a5d18', t: 'YOGA', sub: 'Movement → Mastery', ic: '🧘', msg: 'Yoga is not only the ability to hold a difficult pose; it is the ability to hold onto one’s values in a difficult moment.' }));
+    grp('yagna', () => {
+      blk(10.9, 7.1, 14.9, 11.1, 1, 0x8c7a68); blk(11.4, 7.6, 14.4, 10.6, 0.4, 0xa8916f, 1); blk(11.9, 8.1, 13.9, 10.1, 0.25, 0x3a2a22, 1.4);
+      blk(10.3, 7.6, 10.9, 10.6, 2.7, 0x6b4a2e); blk(9.9, 7.4, 10.9, 10.8, 0.12, 0xb98a3c, 2.7);
+      for (let i = 0; i < 6; i++) blk(10.24, 7.75 + i * 0.5, 10.3, 8.15 + i * 0.5, 0.8, 0xd9b25a, 1.4);
+      flame = new THREE.Mesh(new THREE.ConeGeometry(0.7, 2.2, 18), new THREE.MeshBasicMaterial({ color: 0xffa030 })); flame.position.set(12.9, 2.75, 9.1); PARENT.add(flame);
+    });
+    flameL = new THREE.PointLight(0xff8a30, 1.1, 14); flameL.position.set(12.9, 3.4, 9.1); scene.add(flameL);
+    BOXES.push({ cx: 12.9, cz: 9.1, hx: 2, hz: 2 }, { cx: 10.4, cz: 9.1, hx: 0.5, hz: 1.7 });
+    grp('tirth', () => {
+      panel('N', 7.7, 10.3, 2.5, 7.5, { band: '#8a5d18', t: 'TIRTH YATRA', sub: 'Traveling → Inner discovery', msg: 'Nilkanth Varni’s pilgrimage, 1792–1799', body: 'At eleven, Bhagwan Swaminarayan left Ayodhya as Nilkanth Varni and walked for seven years across the subcontinent, from the Himalayas to the southern tip and on to Gujarat.' });
+      panel('N', 16.9, 19.7, 2.5, 7.5, { band: '#8a5d18', t: 'PILGRIM', sub: 'or tourist?', msg: 'A tourist asks, “What did I see?” A pilgrim also asks, “How did the journey change me?”', body: 'A tradition remains alive when its meaning becomes visible in the way we live.' });
+    });
+    grp('map', () => {
+      const MWd = 5.82, MH = 6.6, MX = 13.6, MY = 1.0, prj = (la, lo) => [(lo - 68) / 29.5 * MWd - MWd / 2, (la - 6.5) / 31 * MH];
+      const sh = new THREE.Shape(); IND.forEach((p, i) => { const [x, y] = prj(p[0], p[1]); i ? sh.lineTo(x, y) : sh.moveTo(x, y); });
+      const mm = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xfff3e0, emissiveIntensity: 0.85, roughness: 0.95 }); glowMats.push([mm, 0.25, 0.85]);
+      const map = new THREE.Mesh(new THREE.ExtrudeGeometry(sh, { depth: 0.17, bevelEnabled: false }), mm); map.position.set(MX, MY, 0.55); PARENT.add(map);
+      const toPx = (x, y, W, H, sc) => { sc = sc || 1; return [W / 2 + x / MWd * W / sc, H - (H - H / sc) / 2 - y / MH * H / sc]; };
+      { const W = 900, H = Math.round(900 * MH / MWd), [c, g] = cv(W, H); g.lineJoin = 'round'; g.lineCap = 'round';
+        g.shadowColor = 'rgba(232,115,26,.6)'; g.shadowBlur = 8; g.strokeStyle = '#e8731a'; g.lineWidth = 7; g.beginPath(); MAPSTOPS.forEach((s, i) => { const [x, y] = toPx(...prj(s[3], s[4]), W, H); i ? g.lineTo(x, y) : g.moveTo(x, y); }); g.stroke(); g.shadowBlur = 0;
+        g.font = `600 22px ${FB}`; g.textBaseline = 'middle'; MAPSTOPS.forEach((s, i) => { const [x, y] = toPx(...prj(s[3], s[4]), W, H), big = i === 0 || i === MAPSTOPS.length - 1; g.fillStyle = '#7d1f33'; g.beginPath(); g.arc(x, y, big ? 14 : 8, 0, 7); g.fill(); g.fillStyle = '#fff'; g.beginPath(); g.arc(x, y, big ? 5 : 3, 0, 7); g.fill(); const left = s[4] < 74 || s[4] > 89; g.textAlign = left ? 'right' : 'left'; g.fillStyle = '#5a1828'; g.fillText(s[0].replace(/ \(.*\)/, ''), x + (left ? -18 : 18), y); });
+        const rt = new THREE.Mesh(new THREE.PlaneGeometry(MWd, MH), new THREE.MeshBasicMaterial({ map: T(c), transparent: true, depthWrite: false })); rt.position.set(MX, MY + MH / 2, 0.73); PARENT.add(rt); }
+      { const sc = 1.3, W = 600, H = Math.round(600 * MH / MWd), [c, g] = cv(W, H); g.shadowColor = 'rgba(255,236,200,1)'; g.shadowBlur = 40; g.fillStyle = 'rgba(255,236,200,1)'; g.beginPath(); IND.forEach((p, i) => { const [x, y] = toPx(...prj(p[0], p[1]), W, H, sc); i ? g.lineTo(x, y) : g.moveTo(x, y); }); g.closePath(); for (let k = 0; k < 3; k++) g.fill();
+        const hm = new THREE.Mesh(new THREE.PlaneGeometry(MWd * sc, MH * sc), addMat({ map: T(c) }, 0.15, 0.4)); hm.position.set(MX, MY + MH / 2, 0.19); PARENT.add(hm); }
+    });
+    BOXES.push({ cx: 13.6, cz: 0.45, hx: 2.9, hz: 0.27 });
+  }
+
+  // ---------- visitor path ----------
+  const ROUTE = [[34, 23], [34, 18.6], [36, 15], [36.3, 11], [35.4, 7.5], [34.4, 4.8], [32, 4.9], [28.5, 5.1], [24.6, 4.8], [24.2, 7.0], [26.5, 11], [27, 14.8], [22, 15], [17.5, 13.6], [14, 15.4], [11, 15.4], [7.8, 13.8], [4.6, 12], [3.4, 9.6], [6.2, 9.4], [8.3, 9.1], [10.3, 5.8], [14.5, 5.3], [17.4, 4.6], [15.5, 3.3], [11, 3.3], [6.5, 3.6], [2, 3.75], [-3, 3.75]];
+  let walkCurve = null;
+  const pathGroup = new THREE.Group(); let showPath = true, walker = null, floorCurve = null, walkerU = 0, floorLen = 1;
+  function buildPath() {
+    floorCurve = new THREE.CatmullRomCurve3(ROUTE.map(([x, z]) => new THREE.Vector3(x, 0.06, z)), false, 'centripetal', 0.5);
+    floorLen = floorCurve.getLength();
+    const gold = new THREE.MeshBasicMaterial({ color: 0xe8b25c, transparent: true, opacity: 0.85, depthWrite: false });
+    pathGroup.add(new THREE.Mesh(new THREE.TubeGeometry(floorCurve, 600, 0.07, 6, false), gold));
+    const cone = new THREE.ConeGeometry(0.28, 0.6, 3);
+    for (let d = 3; d < floorLen - 1; d += 4) { const u = d / floorLen, p = floorCurve.getPointAt(u), tan = floorCurve.getTangentAt(u); const a = new THREE.Mesh(cone, gold); a.position.copy(p); a.position.y = 0.08; a.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), tan.clone().setY(0).normalize()); pathGroup.add(a); }
+    walker = new THREE.Group();
+    const skin = std(0xc98a62, { roughness: 0.7 }), shirt = std(0xe7a75a, { roughness: 0.7, emissive: 0x6a3a14, emissiveIntensity: 0.6 }), pants = std(0x2b2f3a, { roughness: 0.8 });
+    const legs = [-0.22, 0.22].map(dx => { const l = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.13, 2.6, 10), pants); l.geometry.translate(0, -1.3, 0); l.position.set(dx, 2.7, 0); walker.add(l); return l; });
+    const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.36, 2.0, 14), shirt); torso.position.y = 3.7; walker.add(torso);
+    const arms = [-0.55, 0.55].map(dx => { const a = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.1, 1.9, 8), shirt); a.geometry.translate(0, -0.95, 0); a.position.set(dx, 4.6, 0); walker.add(a); return a; });
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.36, 16, 12), skin); head.position.y = 5.1; walker.add(head);
+    walker.userData = { legs, arms }; pathGroup.add(walker); scene.add(pathGroup);
+  }
+  function stepWalker(dt, now) {
+    if (!walker || !pathGroup.visible) return;
+    walkerU = (walkerU + dt * 2.4 / floorLen) % 1;
+    const p = floorCurve.getPointAt(walkerU), tan = floorCurve.getTangentAt(walkerU);
+    walker.position.set(p.x, 0, p.z); walker.rotation.y = Math.atan2(tan.x, tan.z);
+    const sw = Math.sin(now * 0.008) * 0.45; walker.userData.legs[0].rotation.x = sw; walker.userData.legs[1].rotation.x = -sw; walker.userData.arms[0].rotation.x = -sw * 0.8; walker.userData.arms[1].rotation.x = sw * 0.8;
+  }
+  function floorWord(text, x, z) { const [c, g] = cv(600, 144); g.fillStyle = 'rgba(232,178,92,0.75)'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = `700 84px ${FB}`; g.fillText(text, 300, 72); const p = new THREE.Mesh(new THREE.PlaneGeometry(5, 1.2), new THREE.MeshBasicMaterial({ map: T(c), transparent: true })); p.rotation.x = -Math.PI / 2; p.position.set(x, 0.03, z); scene.add(p); }
+  function buildRoute() {
+    buildPath();
+    walkCurve = new THREE.CatmullRomCurve3(ROUTE.map(([x, z]) => new THREE.Vector3(x, EYE, z)), false, 'centripetal', 0.5);
+    floorWord('ENTRY', 34, 22.2); const ex = floorWord('EXIT', -3.4, 3.75);
+  }
+
+  // ---------- spot lights ----------
+  // Every spot is a clamp-on LED fixture on a wall top. Only rows with an intensity add a real light (the scene stays under ~18 lights);
+  // every row also casts a soft pool of light on what it aims at.
+  const FIX = [];
+  function fx(zone, what, on, f, a, arm, ty, ang, inten, pool, tgt) {
+    const w = F[f], [x, z] = w.p(a);
+    FIX.push({ zone, what, on, m: [x, 8, z], c: [x + w.n[0] * arm, 8.45, z + w.n[1] * arm], t: tgt || [x + w.n[0] * 0.1, ty, z + w.n[1] * 0.1], ang, inten, pool });
+  }
+  const NARROW = 0.2, MED = 0.33, FLOOD = 0.5;
+  fx('Riti', 'Riti intro panel', 'East wall top', 'E', 18.7, 1.2, 5, MED, 1.2, ['E', 18.7, 5.3, 2.6, 5.8]);
+  SEC.forEach(sec => sec.ids.forEach((id, i) => { const a = cardA(sec, i); fx('Riti', `Card ${id} · ${SK[id - 1][1]}`, sec.f === 'E' ? 'East wall top' : sec.f === 'N' ? 'North wall top' : 'Divider top', sec.f, a, 1.1, 6.3, NARROW, [2, 5, 7, 12, 15].includes(id) ? 1.3 : 0, [sec.f, a, 6.4, 1.9, 3.3]); }));
+  fx('Riti', 'Name Studio table', 'East wall top', 'E', 4.6, 1.7, 0, FLOOD, 1.1, null, [38.8, 2.9, 4.6]);
+  fx('Riti', 'First Letters table', 'North wall top', 'N', 30.3, 1.7, 0, FLOOD, 1.1, null, [30.3, 2.9, 1.2]);
+  fx('Riti', 'Our Journey wall, left', 'South wall top', 'S', 24.75, 1.1, 4.5, MED, 1.0, ['S', 24.75, 4.9, 3.2, 5.4]);
+  fx('Riti', 'Our Journey wall, right', 'South wall top', 'S', 27.25, 1.1, 4.5, MED, 0, ['S', 27.25, 4.9, 3.2, 5.4]);
+  fx('Parampara', 'Parampara intro, north half', 'Divider top', 'DvW', 2.45, 1.1, 5, MED, 1.0, ['DvW', 2.45, 5.4, 4.9, 6.4]);
+  fx('Parampara', 'Parampara intro, south half', 'Divider top', 'DvW', 6.15, 1.1, 5, MED, 0, ['DvW', 6.15, 5.4, 4.9, 6.4]);
+  fx('Parampara', 'Puja panel and tray, left', 'South wall top', 'S', 9.7, 1.1, 5.4, MED, 1.0, ['S', 9.7, 5.8, 3.85, 5.8]);
+  fx('Parampara', 'Puja panel, right', 'South wall top', 'S', 12.4, 1.1, 5.4, MED, 0, ['S', 12.4, 5.8, 3.85, 5.8]);
+  fx('Parampara', 'Annakut steps and Shabari panel', 'South wall top', 'S', 2.95, 1.4, 4, FLOOD, 1.0, ['S', 2.95, 5.8, 6.3, 5.4], [2.6, 2.4, 18.0]);
+  fx('Parampara', 'Annakut steps and Thaal panel', 'West wall top', 'W', 17, 1.4, 4, FLOOD, 0, ['W', 17, 5.8, 6.4, 5.4], [1.6, 2.4, 17.2]);
+  fx('Parampara', 'Yoga panel, north half', 'West wall top', 'W', 8.4, 1.1, 5, MED, 1.0, ['W', 8.4, 5.4, 4, 6.4]);
+  fx('Parampara', 'Yoga panel, south half', 'West wall top', 'W', 11.4, 1.1, 5, MED, 0, ['W', 11.4, 5.4, 4, 6.4]);
+  fx('Parampara', 'Ahimsa Yagna kund and lectern', 'North wall top, long arm', 'N', 11.6, 1.6, 0, NARROW, 1.4, null, [11.8, 1.6, 9.1]);
+  fx('Parampara', 'Ahimsa Yagna kund', 'North wall top, long arm', 'N', 14.2, 1.6, 0, NARROW, 0, null, [13.4, 1.4, 9.1]);
+  fx('Parampara', 'Tirth Yatra story panel', 'North wall top', 'N', 9.0, 1.1, 5, MED, 1.0, ['N', 9.0, 5.4, 3.8, 6.4]);
+  fx('Parampara', 'Pilgrim panel', 'North wall top', 'N', 18.3, 1.1, 5, MED, 0, ['N', 18.3, 5.4, 4, 6.4]);
+  FIX.forEach((r, i) => { r.n = i + 1; });
+  const beamWord = a => a < 0.25 ? 'Narrow 15–25°' : a < 0.45 ? 'Medium 30–40°' : 'Flood 60°';
+  const spotGroup = new THREE.Group(); spotGroup.visible = false;
+  const SPOTTAGS = []; let showSpots = false;
+  function buildFixtures() {
+    const body = std(0x161618, { roughness: 0.5, metalness: 0.4 }), lens = new THREE.MeshBasicMaterial({ color: 0xffe2a8 });
+    const beamMat = new THREE.MeshBasicMaterial({ color: 0xffcf73, transparent: true, opacity: 0.1, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending });
+    const up = new THREE.Vector3(0, 1, 0), down = new THREE.Vector3(0, -1, 0);
+    FIX.forEach(r => {
+      const M0 = new THREE.Vector3(...r.m), C = new THREE.Vector3(...r.c), Tt = new THREE.Vector3(...r.t);
+      const clamp = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.14, 0.3), body); clamp.position.set(r.m[0], r.m[1] + 0.05, r.m[2]); scene.add(clamp);
+      const armLen = M0.distanceTo(C);
+      if (armLen > 0.05) { const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, armLen, 6), body); arm.position.copy(M0).add(C).multiplyScalar(0.5); arm.quaternion.setFromUnitVectors(up, C.clone().sub(M0).normalize()); scene.add(arm); }
+      const dir = Tt.clone().sub(C).normalize();
+      const can = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.1, 0.36, 12), body); can.position.copy(C); can.quaternion.setFromUnitVectors(up, dir.clone().negate()); scene.add(can);
+      const glass = new THREE.Mesh(new THREE.CircleGeometry(0.1, 12), lens); glass.position.copy(C).addScaledVector(dir, 0.185); glass.lookAt(C.clone().addScaledVector(dir, 2)); scene.add(glass);
+      if (r.inten) { const s = new THREE.SpotLight(0xffe6c4, r.inten, 18, r.ang, 0.6, 1); s.position.copy(C); s.target.position.copy(Tt); scene.add(s); scene.add(s.target); }
+      if (r.pool) { const [f, a, y, w, h] = r.pool; put(new THREE.Mesh(new THREE.PlaneGeometry(w, h), poolMat), f, a, y, 0.11); }
+      const hgt = C.distanceTo(Tt), cone = new THREE.ConeGeometry(Math.tan(r.ang) * hgt, hgt, 24, 1, true); cone.translate(0, -hgt / 2, 0);
+      const beam = new THREE.Mesh(cone, beamMat); beam.position.copy(C); beam.quaternion.setFromUnitVectors(down, dir); beam.renderOrder = 6; spotGroup.add(beam);
+      SPOTTAGS.push({ pos: C.clone().add(new THREE.Vector3(0, 0.45, 0)), text: 'L' + r.n });
+    });
+    scene.add(spotGroup);
+    SPOTTAGS.forEach(d => { const el = document.createElement('div'); el.className = 'spottag'; el.textContent = d.text; el.hidden = true; labelBox.appendChild(el); d.el = el; });
+    $('spotCount').textContent = FIX.length + ' spot lights';
+  }
+  let ambient, hemi;
+  function buildLights() { ambient = new THREE.AmbientLight(0xa8a0a0, 0.16); hemi = new THREE.HemisphereLight(0xfff4e0, 0x2a2622, 0.1); scene.add(ambient, hemi); }
+
+  // ---------- camera: orbit, plan, walk-through, walk around ----------
+  camera.rotation.order = 'YXZ';
+  const orbit = { target: new THREE.Vector3(20, 0, 10), theta: 0.3, phi: 0.85, radius: 40 };
+  const goal = { target: orbit.target.clone(), theta: orbit.theta, phi: orbit.phi, radius: orbit.radius };
+  let mode = 'overview';
+  const tour = { t: 0, playing: true, yawOff: 0, pitchOff: 0, yaw: null, hold: 0, next: 0, look: null };
+  const roam = { x: 34, z: 23, yaw: 0, pitch: -0.05 };
+  const keys = {};
+  function fitRadius(base) { const a = viewer.clientWidth / Math.max(1, viewer.clientHeight); return base * Math.max(1, 1.7 / a); }
+  function setGoal(o) { Object.keys(o).forEach(k => { if (k === 'target') goal.target.copy(o.target); else goal[k] = o[k]; }); }
+  const btn = { overview: $('vOverview'), plan: $('vPlan'), walk: $('vWalk'), roam: $('vRoam'), d2: $('v2d') };
+  const tourEl = $('tour'), padEl = $('pad'), zoomEl = $('zoomCtl'), hintEl = $('hint'), scaleEl = $('scaleNote');
+  const tourPlay = $('tourPlay'), tourBar = $('tourBar'), tourStops = $('tourStops');
+  const HINTS = { orbit: 'Double-click a spot to zoom in · WASD to move · Q/E to turn', roam: 'Drag to look · WASD, arrow keys or the pad to move · Shift for faster' };
+  function setMode(m) {
+    const prev = mode; mode = m;
+    btn.overview.setAttribute('aria-pressed', String(m === 'overview')); btn.plan.setAttribute('aria-pressed', String(m === 'plan'));
+    btn.walk.setAttribute('aria-pressed', String(m === 'walk')); btn.roam.setAttribute('aria-pressed', String(m === 'roam')); btn.d2.setAttribute('aria-pressed', String(m === '2d'));
+    const was2d = viewer.classList.contains('is2d');
+    viewer.classList.toggle('is2d', m === '2d'); $('plan2d').hidden = m !== '2d';
+    if (was2d && m !== '2d') resize();
+    btn.walk.textContent = m === 'walk' ? '■ Stop walk-through' : '▶ Walk through';
+    btn.roam.textContent = m === 'roam' ? '■ Stop walking' : 'Walk around';
+    tourEl.hidden = m !== 'walk'; padEl.hidden = m !== 'roam'; zoomEl.hidden = m === 'walk' || m === 'roam';
+    scaleEl.hidden = m === 'walk'; hintEl.hidden = m === 'walk'; hintEl.textContent = m === 'roam' ? HINTS.roam : HINTS.orbit;
+    if (m === 'overview') setGoal({ target: new THREE.Vector3(20, 0, 10), theta: 0.3, phi: 0.85, radius: fitRadius(40) });
+    if (m === 'plan') setGoal({ target: new THREE.Vector3(20, 0, 10), theta: 0, phi: 0.001, radius: fitRadius(40) });
+    if (m === 'walk') { tour.t = 0; tour.playing = true; tour.hold = 0; tour.next = 0; tour.look = null; tour.yawOff = 0; tour.pitchOff = 0; tour.yaw = null; card.hidden = true; syncTour(); }
+    if (m === 'roam' && prev !== 'roam') { roam.x = 34; roam.z = 23; roam.yaw = 0; roam.pitch = -0.05; card.hidden = true; canvas.focus({ preventScroll: true }); }
+  }
+  btn.overview.addEventListener('click', () => setMode('overview'));
+  btn.plan.addEventListener('click', () => setMode('plan'));
+  btn.walk.addEventListener('click', () => setMode(mode === 'walk' ? 'overview' : 'walk'));
+  btn.roam.addEventListener('click', () => setMode(mode === 'roam' ? 'overview' : 'roam'));
+  btn.d2.addEventListener('click', () => setMode(mode === '2d' ? 'overview' : '2d'));
+  function freeOrbit() { if (mode === 'overview' || mode === 'plan') { mode = 'free'; btn.overview.setAttribute('aria-pressed', 'false'); btn.plan.setAttribute('aria-pressed', 'false'); } }
+
+  const ZONES = { riti: { at: [30.5, 9], roam: [34, 17, 0], stop: 1 }, parampara: { at: [10.5, 10], roam: [21, 14.5, Math.PI / 2], stop: 8 } };
+  document.querySelectorAll('[data-zone]').forEach(b => b.addEventListener('click', () => {
+    const Z = ZONES[b.dataset.zone];
+    if (mode === '2d') setMode('free');
+    if (mode === 'roam') { roam.x = Z.roam[0]; roam.z = Z.roam[1]; roam.yaw = Z.roam[2]; roam.pitch = -0.05; return; }
+    if (mode === 'walk') { jumpStop(Z.stop); return; }
+    mode = 'free'; ['overview', 'plan'].forEach(k => btn[k].setAttribute('aria-pressed', 'false'));
+    setGoal({ target: new THREE.Vector3(Z.at[0], 2, Z.at[1]), radius: 24, theta: 0.3, phi: 0.82 });
+  }));
+
+  // [name, route index, look-at point]
+  const STOPS = [['Entry', 0, [34, 15]], ['Riti intro', 1, [39.8, 18.7]], ['Before Birth', 2, [39.8, 13]], ['Name Studio', 4, [39.8, 4.6]], ['First Steps', 6, [35.5, 0]], ['Learning + Rice', 7, [28.5, 0]], ['Marriage · Farewell', 9, [21.4, 4.4]], ['Our Journey wall', 11, [26, 20]], ['Arti alcove', 13, [17.5, 19.5]], ['Puja', 15, [11, 20]], ['Annakut', 16, [1.2, 18.6]], ['Yoga', 18, [0, 9.9]], ['Ahimsa Yagna', 20, [12.9, 9.1]], ['Tirth Yatra map', 24, [13.6, 0]], ['Exit', 28, [-6, 3.75]]];
+  let stopU = [];
+  function buildStops() {
+    const n = ROUTE.length - 1, L = walkCurve.getLengths(400);
+    stopU = STOPS.map(([, i]) => L[Math.round(400 * i / n)] / L[400]);
+    STOPS.forEach(([name], k) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = name; b.addEventListener('click', () => jumpStop(k)); tourStops.appendChild(b); });
+  }
+  function jumpStop(k) { tour.t = stopU[k]; tour.hold = 3; tour.look = STOPS[k][2]; tour.next = k + 1; tour.yaw = null; tour.yawOff = 0; tour.pitchOff = 0; syncTour(); }
+  function syncTour() {
+    tourPlay.textContent = tour.playing ? 'Pause' : (tour.t >= 1 ? 'Replay' : 'Play'); tourBar.value = String(Math.round(tour.t * 1000));
+    let cur = 0; stopU.forEach((u, k) => { if (tour.t + 0.015 >= u) cur = k; }); [...tourStops.children].forEach((b, k) => b.setAttribute('aria-current', String(k === cur)));
+  }
+  tourPlay.addEventListener('click', () => { if (tour.t >= 1) { tour.t = 0; tour.yaw = null; tour.next = 0; tour.hold = 0; } tour.playing = !tour.playing; syncTour(); });
+  tourBar.addEventListener('input', () => { tour.t = Number(tourBar.value) / 1000; tour.playing = false; tour.yaw = null; tour.hold = 0; tour.next = stopU.findIndex(u => u > tour.t + 0.001); if (tour.next < 0) tour.next = stopU.length; syncTour(); });
+  function zoomBy(dir) { goal.radius = THREE.MathUtils.clamp(goal.radius * (dir > 0 ? 1.25 : 0.8), 5, 110); }
+  $('zIn').addEventListener('click', () => zoomBy(-1)); $('zOut').addEventListener('click', () => zoomBy(1));
+  padEl.querySelectorAll('[data-k]').forEach(b => { const k = b.dataset.k; const on = e => { e.preventDefault(); keys[k] = true; if (b.setPointerCapture) b.setPointerCapture(e.pointerId); }; const off = () => { keys[k] = false; }; b.addEventListener('pointerdown', on); b.addEventListener('pointerup', off); b.addEventListener('pointercancel', off); b.addEventListener('lostpointercapture', off); });
+  let hover = false;
+  viewer.addEventListener('pointerenter', () => { hover = true; }); viewer.addEventListener('pointerleave', () => { hover = false; });
+  const NAV = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyQ', 'KeyE', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ShiftLeft', 'ShiftRight'];
+  window.addEventListener('keydown', e => {
+    const tag = e.target && e.target.tagName; if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    if (!(hover || document.activeElement === canvas)) return;
+    if (e.code === 'Space' && mode === 'walk') { e.preventDefault(); if (tour.t >= 1) { tour.t = 0; tour.next = 0; } tour.playing = !tour.playing; syncTour(); return; }
+    if ((e.code === 'Equal' || e.code === 'NumpadAdd') && mode !== 'roam' && mode !== 'walk') { zoomBy(-1); return; }
+    if ((e.code === 'Minus' || e.code === 'NumpadSubtract') && mode !== 'roam' && mode !== 'walk') { zoomBy(1); return; }
+    if (!NAV.includes(e.code) || mode === 'walk') return; keys[e.code] = true; e.preventDefault();
+  });
+  window.addEventListener('keyup', e => { keys[e.code] = false; });
+  window.addEventListener('blur', () => Object.keys(keys).forEach(k => { keys[k] = false; }));
+  const pointers = new Map(); let drag = null, pinch0 = 0;
+  canvas.addEventListener('contextmenu', e => e.preventDefault());
+  canvas.addEventListener('pointerdown', e => {
+    canvas.focus({ preventScroll: true }); canvas.setPointerCapture(e.pointerId); pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    drag = { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY, pan: e.button === 2 || e.shiftKey, moved: 0 };
+    if (pointers.size === 2) { const [a, b] = [...pointers.values()]; pinch0 = Math.hypot(a.x - b.x, a.y - b.y); }
+  });
+  canvas.addEventListener('pointermove', e => {
+    if (!pointers.has(e.pointerId) || !drag) return; pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pointers.size === 2) { const [a, b] = [...pointers.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y); if (pinch0 && mode !== 'roam' && mode !== 'walk') { goal.radius = THREE.MathUtils.clamp(goal.radius * pinch0 / d, 5, 110); orbit.radius = goal.radius; freeOrbit(); } pinch0 = d; drag.moved += 10; return; }
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY;
+    drag.moved = Math.max(drag.moved, Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy));
+    if (mode === 'roam') { roam.yaw += dx * 0.0045; roam.pitch = THREE.MathUtils.clamp(roam.pitch + dy * 0.0035, -1.1, 0.9); return; }
+    if (mode === 'walk') { tour.yawOff += dx * 0.0045; tour.pitchOff = THREE.MathUtils.clamp(tour.pitchOff + dy * 0.0035, -0.9, 0.8); return; }
+    if (drag.pan) { const s = orbit.radius * 0.0016, st = Math.sin(orbit.theta), ct = Math.cos(orbit.theta); goal.target.x += (-dx * ct - dy * st) * s; goal.target.z += (dx * st - dy * ct) * s; goal.target.x = THREE.MathUtils.clamp(goal.target.x, -5, 45); goal.target.z = THREE.MathUtils.clamp(goal.target.z, -5, 25); orbit.target.copy(goal.target); }
+    else { goal.theta -= dx * 0.006; goal.phi = THREE.MathUtils.clamp(goal.phi - dy * 0.005, 0.001, 1.48); orbit.theta = goal.theta; orbit.phi = goal.phi; }
+    if (drag.moved > 6) freeOrbit();
+  });
+  const endPointer = e => { if (!pointers.has(e.pointerId)) return; pointers.delete(e.pointerId); if (pointers.size < 2) pinch0 = 0; if (drag && drag.moved < 6 && pointers.size === 0) pick(e.clientX, e.clientY); if (pointers.size === 0) drag = null; };
+  canvas.addEventListener('pointerup', endPointer); canvas.addEventListener('pointercancel', endPointer);
+  canvas.addEventListener('wheel', e => { e.preventDefault(); if (mode === 'walk' || mode === 'roam') return; goal.radius = THREE.MathUtils.clamp(goal.radius * (1 + Math.sign(e.deltaY) * Math.min(0.25, Math.abs(e.deltaY) * 0.0012)), 5, 110); freeOrbit(); }, { passive: false });
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  canvas.addEventListener('dblclick', e => {
+    if (mode === 'walk' || mode === 'roam') return; const r = canvas.getBoundingClientRect();
+    ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); ray.setFromCamera(ndc, camera);
+    const hit = ray.intersectObjects(scene.children, true).find(h => h.object.visible && h.object.isMesh); if (!hit) return;
+    freeOrbit(); mode = 'free';
+    setGoal({ target: new THREE.Vector3(THREE.MathUtils.clamp(hit.point.x, -3, 43), Math.min(3, Math.max(0, hit.point.y)), THREE.MathUtils.clamp(hit.point.z, -3, 23)), radius: Math.max(9, goal.radius * 0.55) });
+    if (goal.phi < 0.35) goal.phi = 0.7;
+  });
+  function pick(cx, cy) {
+    const r = canvas.getBoundingClientRect(); ndc.set(((cx - r.left) / r.width) * 2 - 1, -((cy - r.top) / r.height) * 2 + 1); ray.setFromCamera(ndc, camera);
+    const hit = ray.intersectObjects(CLICK, false).find(h => h.object.visible); if (!hit) { card.hidden = true; return; } openCard(hit.object.userData.item, false);
+  }
+
+  // ---------- collision for walking around ----------
+  const RAD = 0.75;
+  function pushSeg(p, s) { const dx = s.bx - s.ax, dz = s.bz - s.az, L2 = dx * dx + dz * dz; let t = ((p.x - s.ax) * dx + (p.z - s.az) * dz) / L2; t = Math.max(0, Math.min(1, t)); const cx = s.ax + dx * t, cz = s.az + dz * t, ex = p.x - cx, ez = p.z - cz, d = Math.hypot(ex, ez), min = RAD + 0.18; if (d < min && d > 1e-5) { const k = min / d; p.x = cx + ex * k; p.z = cz + ez * k; } }
+  function pushBox(p, b) { const hx = b.hx + RAD, hz = b.hz + RAD, dx = p.x - b.cx, dz = p.z - b.cz; if (Math.abs(dx) < hx && Math.abs(dz) < hz) { if (hx - Math.abs(dx) < hz - Math.abs(dz)) p.x = b.cx + (dx >= 0 ? 1 : -1) * hx; else p.z = b.cz + (dz >= 0 ? 1 : -1) * hz; } }
+  function pushCirc(p, c) { const dx = p.x - c.cx, dz = p.z - c.cz, d = Math.hypot(dx, dz), min = c.r + RAD; if (d < min && d > 1e-5) { p.x = c.cx + dx / d * min; p.z = c.cz + dz / d * min; } }
+  function collide(p) { for (let i = 0; i < 3; i++) { SEGS.forEach(s => pushSeg(p, s)); BOXES.forEach(b => pushBox(p, b)); CIRCS.forEach(c => pushCirc(p, c)); } p.x = THREE.MathUtils.clamp(p.x, -6, 46); p.z = THREE.MathUtils.clamp(p.z, -4, 26); }
+
+  // ---------- info card and labels ----------
+  const card = $('card');
+  $('cardClose').addEventListener('click', () => { card.hidden = true; });
+  function openCard(id, fly) {
+    const it = ITEMS[id]; if (!it) return;
+    card.style.setProperty('--c', ZC[it.zone]); $('cTag').textContent = it.zone; $('cName').textContent = it.name; $('cWhat').textContent = it.what; $('cBuild').textContent = it.build; $('cSize').textContent = it.size;
+    card.hidden = false;
+    if (fly && mode !== 'walk') { mode = 'free'; ['overview', 'plan'].forEach(k => btn[k].setAttribute('aria-pressed', 'false')); setGoal({ target: new THREE.Vector3(it.at[0], 2.5, it.at[1]), radius: id === 'timeline' ? 24 : 15, theta: it.view, phi: 0.95 }); }
+  }
+  document.querySelectorAll('[data-item]').forEach(b => b.addEventListener('click', () => {
+    if (mode === 'walk' || mode === 'roam' || mode === '2d') setMode('free');
+    openCard(b.dataset.item, true); viewer.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+  }));
+  const labelBox = $('labels'); const labelEls = [];
+  LABELS.forEach(([id, text, y]) => { const it = ITEMS[id]; const el = document.createElement('button'); el.type = 'button'; el.className = 'lbl'; el.textContent = text; el.style.setProperty('--c', ZC[it.zone]); el.addEventListener('click', () => openCard(id, false)); labelBox.appendChild(el); labelEls.push({ el, pos: new THREE.Vector3(it.at[0], y, it.at[1]) }); });
+  let showLabels = true;
+  const tog = (id, fn) => { const b = $(id); b.addEventListener('click', () => { const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', String(on)); fn(on); }); };
+  tog('tLabels', on => { showLabels = on; });
+  tog('tClear', on => { showClear = on; $('clearLegend').hidden = !on; });
+  tog('tSpots', on => { showSpots = on; $('spotLegend').hidden = !on; });
+  tog('tPath', on => { showPath = on; });
+  let showDims = false; tog('tDims', on => { showDims = on; });
+  tog('tWalls', on => { SEE.forEach(m => { m.transparent = on; m.opacity = on ? 0.16 : 1; m.depthWrite = !on; m.needsUpdate = true; }); });
+  let exhibit = true;
+  function applyLights() {
+    ambient.intensity = exhibit ? 0.16 : 0.4; hemi.intensity = exhibit ? 0.1 : 1.0; scene.background.set(exhibit ? 0x0e0a09 : 0x2a201c);
+    glowMats.forEach(([m, d, n]) => { m.emissiveIntensity = exhibit ? n : d; }); haloMats.forEach(([m, d, n]) => { m.opacity = exhibit ? n : d; });
+    poolMat.opacity = exhibit ? 0.42 : 0.08;
+  }
+  tog('tLights', on => { exhibit = on; applyLights(); });
+
+  // ---------- dimensions in 3D ----------
+  const dimGroup = new THREE.Group(); dimGroup.visible = false; const DIMS = [];
+  const dimMat = new THREE.LineBasicMaterial({ color: 0xe8b25c, depthTest: false, transparent: true, opacity: 0.95 });
+  function dimLine(ax, az, bx, bz, text, y) {
+    y = y === undefined ? 0.12 : y; const dx = bx - ax, dz = bz - az, L = Math.hypot(dx, dz), nx = -dz / L * 0.35, nz = dx / L * 0.35;
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute([ax, y, az, bx, y, bz, ax - nx, y, az - nz, ax + nx, y, az + nz, bx - nx, y, bz - nz, bx + nx, y, bz + nz], 3));
+    const l = new THREE.LineSegments(g, dimMat); l.renderOrder = 10; dimGroup.add(l); DIMS.push({ pos: new THREE.Vector3((ax + bx) / 2, y, (az + bz) / 2), text, kind: 'dim' });
+  }
+  function dimTag(x, y, z, text) { DIMS.push({ pos: new THREE.Vector3(x, y, z), text, kind: 'dimtag' }); }
+  function buildDims() {
+    dimLine(0, -1.6, 40, -1.6, '40 ft'); dimLine(41.6, 0, 41.6, 20, '20 ft');
+    dimLine(0, 21.6, 21.2, 21.6, 'Parampara 21.2 ft'); dimLine(21.2, 21.6, 40, 21.6, 'Riti 18.8 ft');
+    dimLine(31.5, 20.8, 36.5, 20.8, 'Entry 5 ft'); dimLine(-1.4, 1.5, -1.4, 6, 'Exit 4½ ft');
+    dimLine(38.4, 0.6, 38.4, 17.6, 'East run 17 ft'); dimLine(22, 5.6, 39.4, 5.6, 'North run 17.4 ft'); dimLine(22.4, 0.6, 22.4, 8.2, 'Divider run 7.6 ft');
+    dimLine(37.3, 2.6, 37.3, 6.6, 'Name 4 ft'); dimLine(28.3, 2.7, 32.3, 2.7, 'Rice 4 ft'); dimLine(23.5, 18.1, 28.5, 18.1, 'Journey 5 ft');
+    dimLine(15.1, 15.4, 19.9, 15.4, 'Alcove 4.8 ft'); dimLine(14.6, 16, 14.6, 20, '4 ft');
+    dimLine(8.4, 17.7, 13.7, 17.7, 'Puja 5.3 ft'); dimLine(0.18, 14.3, 5.18, 14.3, 'Annakut r 5 ft'); dimLine(1.4, 6.9, 1.4, 12.9, 'Yoga 6 ft');
+    dimLine(10.9, 11.7, 14.9, 11.7, 'Kund 4 ft'); dimLine(12.9, 0.72, 12.9, 7.1, '6.4 ft'); dimLine(14.9, 9.1, 21.0, 9.1, '6.1 ft'); dimLine(12.9, 11.1, 12.9, 18.3, '7.2 ft');
+    dimLine(10.7, 2.0, 16.5, 2.0, 'Map 5.8 ft'); dimLine(7.7, 3.1, 19.7, 3.1, 'Tirth wall 12 ft');
+    dimTag(20, 8.6, 0, 'Walls 8 ft high'); dimTag(39.6, 5.3, 12.5, 'Strip 9½″ tall, 4½″ off wall, 4′4″–5′1″ up'); dimTag(39.6, 7.9, 15.5, 'Cards 18 × 27″, 5′3″–7′6″ up');
+    dimTag(21.4, 8.6, 4.3, 'Divider 8.5 ft'); dimTag(13.6, 8.1, 0.7, 'Map 5′10″ × 6′7″, 1′–7′7″ up'); dimTag(17.5, 8.6, 17.6, 'Alcove 4′5″ inside · valance 7–8 ft');
+    dimTag(1.6, 3.4, 18.3, '4 steps, 8″ to 2′10″'); dimTag(12.9, 3.6, 9.1, 'Kund 4 × 4 × 1 ft + 3 ft lectern'); dimTag(38.8, 3.5, 4.6, 'Table 4 × 2 × 3 ft'); dimTag(30.3, 3.5, 1.2, 'Table 4 × 2 × 3 ft');
+    dimTag(26, 7.2, 19.6, 'Board 5 × 4 ft · ledge at 3 ft');
+    scene.add(dimGroup);
+    DIMS.forEach(d => { const el = document.createElement('div'); el.className = d.kind; el.textContent = d.text; el.hidden = true; labelBox.appendChild(el); d.el = el; });
+  }
+
+  // ---------- walking space ----------
+  // A 3 in grid over the floor: objects, people using a station, people reading a wall, and the clear walkway left over.
+  const CG = { res: 0.25, nx: 160, nz: 80 }; const cgrid = new Uint8Array(CG.nx * CG.nz);
+  const clearGroup = new THREE.Group(); clearGroup.visible = false; const CLEARS = []; let showClear = false;
+  const ftIn = ft => { const i = Math.round(ft * 12); return Math.floor(i / 12) + '′ ' + (i % 12) + '″'; };
+  function cgSet(fn, type, over) { for (let j = 0; j < CG.nz; j++) for (let i = 0; i < CG.nx; i++) { const x = (i + 0.5) * CG.res, z = (j + 0.5) * CG.res, k = j * CG.nx + i; if (fn(x, z) && (over || cgrid[k] === 0 || cgrid[k] > type)) cgrid[k] = type; } }
+  const inRect = (x0, z0, x1, z1) => (x, z) => x >= x0 && x <= x1 && z >= z0 && z <= z1;
+  const nearSeg = (ax, az, bx, bz, r) => (x, z) => { const dx = bx - ax, dz = bz - az, L2 = dx * dx + dz * dz; let t = ((x - ax) * dx + (z - az) * dz) / L2; t = Math.max(0, Math.min(1, t)); return Math.hypot(x - ax - dx * t, z - az - dz * t) <= r; };
+  const inRing = (cx, cz, r0, r1) => (x, z) => { const d = Math.hypot(x - cx, z - cz); return d >= r0 && d <= r1; };
+  function buildClearance() {
+    WALLS.forEach(([a, b]) => cgSet(nearSeg(a[0], a[1], b[0], b[1], 0.3), 1, true));
+    BOXES.forEach(b => cgSet(inRect(b.cx - b.hx, b.cz - b.hz, b.cx + b.hx, b.cz + b.hz), 1, true));
+    CIRCS.forEach(c => cgSet(inRing(c.cx, c.cz, 0, c.r), 1, true));
+    // people using a station
+    [[35.3, 2.6, 37.8, 6.6], [28.3, 2.2, 32.3, 4.7], [23.5, 16.55, 28.5, 18.55], [9.3, 15.8, 12.8, 18.3], [7.4, 7.6, 9.9, 10.6]].forEach(r => cgSet(inRect(...r), 2));
+    // people reading a wall or watching
+    [[37.45, 0.6, 39.45, 19.6], [22, 0.55, 39.4, 2.55], [21.75, 0.6, 23.75, 8.2], [19.0, 0.6, 21.0, 8.0], [15.3, 14.2, 19.7, 17.2], [8.4, 15.8, 13.7, 18.3], [0.55, 6.9, 2.55, 12.9], [7.7, 0.72, 19.7, 2.9], [23.5, 16.55, 28.5, 18.55]].forEach(r => cgSet(inRect(...r), 3));
+    cgSet(inRing(0.18, 19.82, 5, 7), 3);
+    const COL = { 0: 'rgba(52, 199, 110, 0.36)', 2: 'rgba(242, 168, 60, 0.5)', 3: 'rgba(96, 146, 240, 0.42)' };
+    const [c, g] = cv(CG.nx * 4, CG.nz * 4); for (let j = 0; j < CG.nz; j++) for (let i = 0; i < CG.nx; i++) { const v = cgrid[j * CG.nx + i]; if (v === 1) continue; g.fillStyle = COL[v]; g.fillRect(i * 4, j * 4, 4, 4); }
+    const t = T(c); t.magFilter = THREE.NearestFilter;
+    const plane = new THREE.Mesh(new THREE.PlaneGeometry(40, 20), new THREE.MeshBasicMaterial({ map: t, transparent: true, depthWrite: false })); plane.rotation.x = -Math.PI / 2; plane.position.set(20, 0.025, 10); plane.renderOrder = 5; clearGroup.add(plane);
+    const free = (x, z) => { const i = Math.floor(x / CG.res), j = Math.floor(z / CG.res); return i >= 0 && j >= 0 && i < CG.nx && j < CG.nz && cgrid[j * CG.nx + i] === 0; };
+    const lineMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8, depthTest: false });
+    [['Inside the entry, past the Journey writers', 33, 19, 'x'], ['Divider readers ↔ Name Studio users', 30, 5.5, 'x'], ['Behind the First Letters users', 30.3, 7, 'z'], ['Riti → Parampara passage', 20.5, 12, 'z'], ['In front of the Arti alcove', 17.5, 11, 'z'], ['Puja ↔ Yagna', 12.9, 13.5, 'z'], ['Yoga ↔ Yagna lectern', 5, 9, 'x'], ['East of the kund', 17.9, 7.6, 'x'], ['Map ↔ Yagna', 12.9, 4.6, 'z'], ['To the exit', 2, 3.75, 'z']]
+      .forEach(([name, x, z, ax]) => {
+        if (!free(x, z)) return; const st = 0.05; let a = 0, b = 0;
+        const step = s => ax === 'z' ? free(x, z + s) : free(x + s, z);
+        while (step(-(a + st)) && a < 25) a += st; while (step(b + st) && b < 25) b += st;
+        const w = Math.round((a + b) * 12) / 12, p0 = ax === 'z' ? [x, z - a] : [x - a, z], p1 = ax === 'z' ? [x, z + b] : [x + b, z];
+        const g2 = new THREE.BufferGeometry(); g2.setAttribute('position', new THREE.Float32BufferAttribute([p0[0], 0.06, p0[1], p1[0], 0.06, p1[1]], 3));
+        const ln = new THREE.Line(g2, lineMat); ln.renderOrder = 11; clearGroup.add(ln);
+        const lvl = w >= 5 ? 'ok' : w >= 3.5 ? 'warn' : 'bad';
+        CLEARS.push({ pos: new THREE.Vector3((p0[0] + p1[0]) / 2, 0.06, (p0[1] + p1[1]) / 2), text: ftIn(w) + ' clear', lvl, name, w });
+      });
+    scene.add(clearGroup);
+    CLEARS.forEach(cc => { const el = document.createElement('div'); el.className = 'clr ' + cc.lvl; el.textContent = cc.text; el.title = cc.name; el.hidden = true; labelBox.appendChild(el); cc.el = el; });
+    const word = { ok: 'Two people pass', warn: 'One-way flow', bad: 'Pinch point' };
+    $('clearTable').innerHTML = '<thead><tr><th>Where</th><th>Clear width</th><th>Reads as</th></tr></thead><tbody>' + CLEARS.map(cc => `<tr><td><b>${cc.name}</b></td><td class="q">${ftIn(cc.w)}</td><td><span class="pill ${cc.lvl}">${word[cc.lvl]}</span></td></tr>`).join('') + '</tbody>';
+  }
+
+  // ---------- content tables below the model ----------
+  $('tl').innerHTML = '<thead><tr><th>#</th><th>Samskara</th><th>Say it</th><th>Section</th><th>Card text</th></tr></thead><tbody>' + SK.map(s => { const sec = SEC.find(x => x.ids.includes(s[0])); return `<tr><td class="n"><span>${s[0]}</span></td><td><b>${s[1]}</b></td><td class="say">${s[2]}</td><td>${sec.n.charAt(0) + sec.n.slice(1).toLowerCase()}</td><td>${s[4]}</td></tr>`; }).join('') + '</tbody>';
+  $('stops').innerHTML = '<thead><tr><th>#</th><th>Stop</th><th>Region</th><th>Note</th></tr></thead><tbody>' + MAPSTOPS.map((s, i) => `<tr><td class="n"><span>${i + 1}</span></td><td><b>${s[0]}</b></td><td>${s[1]}</td><td>${s[2]}</td></tr>`).join('') + '</tbody>';
+
+  // ---------- 2D plan, materials, media, lighting ----------
+  const MATERIALS = [
+    [1, 'Walls', '≈127 linear ft, 8 ft high', '½ in plywood 4 × 8 sheets on 2×4 frames, painted deep warm brown (Arti alcove near-black inside); bolted together, kickers and sandbags', '38 sheets'],
+    [2, 'Timeline strip', '≈42 ft long, 9½ in tall, 4½ in off the wall', '2 in fire-rated foam board or PVC, six section names cut through, white diffusion behind, 3000K LED tape inside plus top and bottom wash, on 2½ in standoff blocks', '6 sections'],
+    [3, 'Samskara cards', '18 × 27 in each', '3 mm PVC or foam-board prints at 5′3″–7′6″, one clamp spot each', '16'],
+    [4, 'Riti intro panel', '1.8 × 5 ft', 'Printed panel on the east wall by the entry', '1'],
+    [5, 'Meaningful Name Studio', '4 × 2 ft table, 3.6 × 1.1 ft panel', 'Borrowed folding table with skirt, 8-value panel on the wall, card organizers', '1'],
+    [6, 'First Letters in Rice', '4 × 2 ft table, 3.6 × 1.1 ft panel', 'Folding table, two 12 × 16 in rice trays, laminated guides, paddles, wipes', '1'],
+    [7, 'Our Journey wall', '5 × 4 ft board, 15 in ledge', 'Grid board on the south wall, ¾ in ledge on brackets at 3 ft, cardstock squares, tethered markers', '1'],
+    [8, 'Parampara intro', '7.4 × 5 ft', 'Printed panel on the divider’s west face', '1'],
+    [9, 'Arti alcove', '4.8 × 4 ft, 8 ft high', 'Two 4 ft returns, 1 ft valance, black FR scrim canopy, three diya steps, two side shelves, ≈47 LED diyas, LED arti on a 3 ft pedestal, dark panel', '1'],
+    [10, 'Puja and flower offering', '5.3 × 4.4 ft panel, 3.5 × 1.5 × 3 ft counter', 'Printed panel, ¾ in counter, offering tray, reusable flowers if approved', '1'],
+    [11, 'Thaal and Annakut', '4 steps, 5 ft radius; 2 panels ≈5 × 4 ft', 'Quarter-round ¾ in ply tiers on 2×4 ribs, ¼ in bending-ply risers, burgundy FR fabric, gold trim, ≈60 food items, thaal on top', '1'],
+    [12, 'Yoga panel', '6 × 5 ft', 'Printed panel on the west wall', '1'],
+    [13, 'Ahimsa Yagna', '4 × 4 × 1 ft base, 3 ft lectern', 'Faux-stone ¾ in ply kund, LED flicker flame with silk and fan, tile slot and catch drawer, 6 hinged reveal doors', '1'],
+    [14, 'Tirth Yatra map', '5.8 × 6.6 ft', '2 in white fire-rated foam cut-out of India and Nepal on 4½ in standoffs, LED halo behind, saffron route', '1'],
+    [15, 'Tirth Yatra panels', '2.6 × 5 and 2.8 × 5 ft', 'Printed panels either side of the map', '2'],
+    ['L', 'Spot lights', FIX.length + ' fixtures', 'Clamp-on LED spots 5–7 W, 3000K, 12–20 in arms on wall tops; narrow, medium and flood beams (Lighting tab)', (FIX.length + 3) + ' (3 spare)']];
+  const BOM = [
+    ['Plywood and lumber', '½ in plywood, 4 × 8 ft', '29', 'sheets', 'Outer walls, one finished face: north 40 ft (10), east 20 ft (5), south 31.5 + 3.5 ft (8 + 1), west 1.5 + 14 ft (1 + 4)', 'Outer walls'],
+    ['Plywood and lumber', '½ in plywood, 4 × 8 ft', '5', 'sheets', 'Divider 8.5 ft, both faces (2 full + a ½ ft strip each side; the strips share a sheet)', 'Divider'],
+    ['Plywood and lumber', '½ in plywood, 4 × 8 ft', '4', 'sheets', 'Two 4 ft returns, both faces', 'Arti alcove'],
+    ['Plywood and lumber', '½ in plywood, 4 × 8 ft', '1', 'sheet', 'Valance 5 × 1 ft and the two 3.6 × 1.1 ft wall panels', 'Arti alcove, Name, Rice'],
+    ['Plywood and lumber', '½ in plywood, 4 × 8 ft', '2', 'sheets', 'Grid board 5 × 4 ft, in two pieces', 'Our Journey wall'],
+    ['Plywood and lumber', '½ in plywood, 4 × 8 ft', '1', 'sheet', 'Lectern sides and the 6 reveal doors', 'Ahimsa Yagna'],
+    ['Plywood and lumber', '½ in plywood, 4 × 8 ft (spares)', '3', 'sheets', 'Mistakes and patches', 'Spares'],
+    ['Plywood and lumber', '¾ in plywood, 4 × 8 ft', '3', 'sheets', 'Tier tops: 5 ft radius in 2 pieces, 3.9 and 2.8 ft radius on one sheet, 1.7 ft from an offcut', 'Annakut steps'],
+    ['Plywood and lumber', '¾ in plywood, 4 × 8 ft', '2', 'sheets', 'Base 4 × 4 × 1 ft (top and 4 sides), raised 3 × 3 ft step, sloped tile tray', 'Ahimsa Yagna'],
+    ['Plywood and lumber', '¾ in plywood, 4 × 8 ft', '2', 'sheets', '3 diya steps 4.5 ft wide, 4 side shelves, 3 ft arti pedestal', 'Arti alcove'],
+    ['Plywood and lumber', '¾ in plywood, 4 × 8 ft', '1', 'sheet', 'Counter 3.5 × 1.5 × 3 ft: top, front, 2 sides', 'Puja'],
+    ['Plywood and lumber', '¾ in plywood, 4 × 8 ft', '1', 'sheet', 'Ledge 5 ft × 15 in plus brackets', 'Our Journey wall'],
+    ['Plywood and lumber', '¾ in plywood, 4 × 8 ft (spare)', '1', 'sheet', 'Mistakes', 'Spares'],
+    ['Plywood and lumber', '¼ in bending plywood, 4 × 8 ft', '2', 'sheets', 'Curved risers, about 21 ft of 8 in strips; one spare', 'Annakut steps'],
+    ['Plywood and lumber', '2 × 4 × 8 ft studs', '74', 'pieces', 'Studs every 24 in on 9 wall runs (≈127 ft)', 'Wall frames'],
+    ['Plywood and lumber', '2 × 4 × 8 ft studs', '34', 'pieces', 'Top and bottom plates, 2 × 127 ft', 'Wall frames'],
+    ['Plywood and lumber', '2 × 4 × 8 ft studs', '25', 'pieces', 'Diagonal kickers about every 6 ft of wall; nothing screws into the gym floor', 'Wall bracing'],
+    ['Plywood and lumber', '2 × 4 × 8 ft studs', '12', 'pieces', 'Ribs under the four tiers', 'Annakut steps'],
+    ['Plywood and lumber', '2 × 4 × 8 ft studs', '13', 'pieces', 'About 10% extra, plus blocking behind the strip and the map standoffs', 'Waste and blocking'],
+    ['Plywood and lumber', '2 × 2 × 8 ft', '14', 'pieces', 'Inner frames: Yagna base (8), Puja counter (3), Arti pedestal (3)', 'Boxes'],
+    ['Plywood and lumber', '2 × 3 × 8 ft', '4', 'pieces', 'Cut into 2½ in standoff blocks every 2 ft: strip (≈22) and map (≈12)', 'Timeline, map'],
+    ['Plywood and lumber', 'Sandbags, 25 lb', '54', 'bags', '2 per kicker (50) plus 4 spare', 'Stability'],
+    ['Walls and finishes', 'Deep warm brown matte paint', '7', 'gallons', 'About 1,100 sq ft of wall faces, 2 coats', 'Walls'],
+    ['Walls and finishes', 'Near-black matte paint', '1', 'gallon', 'Inside the alcove', 'Arti alcove'],
+    ['Walls and finishes', 'Primer', '4', 'gallons', 'One coat on raw plywood', 'All painted plywood'],
+    ['Walls and finishes', 'Faux-stone paint kit', '1', 'set', 'Or textured spray, latex only', 'Ahimsa Yagna'],
+    ['Walls and finishes', 'Burgundy flame-retardant fabric', '10', 'yards', 'Tier tops and risers', 'Annakut'],
+    ['Walls and finishes', 'Gold trim ribbon', '30', 'ft', 'Step edges', 'Annakut'],
+    ['Walls and finishes', 'Black flame-retardant scrim', '2', 'yards', 'Canopy about 5 × 4 ft', 'Arti alcove'],
+    ['Walls and finishes', 'Rollers, trays, brushes, sandpaper, wood filler', '1', 'set', '', 'Painting'],
+    ['Foam and fabrication', '2 in fire-rated foam board or PVC, 4 × 8 ft', '3', 'sheets', 'Five 9½ in strips per sheet ≈ 40 ft; the run is about 42 ft', 'Timeline strip'],
+    ['Foam and fabrication', '2 in fire-rated white foam board, 4 × 8 ft', '3', 'sheets', 'Two joined plus one spare', 'Tirth Yatra map'],
+    ['Foam and fabrication', 'White translucent acrylic, ⅛ in, 4 × 8 ft', '2', 'sheets', 'Diffusion strips behind the cut letters', 'Timeline strip'],
+    ['Foam and fabrication', 'CNC or laser cutting', '1', 'job', 'Six section names and the India–Nepal outline, from vector files', 'Timeline, map'],
+    ['Foam and fabrication', 'Saffron vinyl tape or printed route', '1', 'set', 'Route line and stop dots', 'Tirth Yatra map'],
+    ['Stations', 'Folding table 4 × 2 ft with skirt', '2', 'tables', 'Borrow', 'Name, Rice'],
+    ['Stations', 'Card organizers', '2', 'sets', '8 value slots plus takeaways', 'Name Studio'],
+    ['Stations', 'Shallow trays about 12 × 16 in', '2', 'trays', 'Washable, spill-resistant', 'Rice'],
+    ['Stations', 'Uncooked rice', '10', 'lb', 'Plus smoothing paddles, wipes, dustpan', 'Rice'],
+    ['Stations', 'Cardstock squares 3.5–4 in', '200', 'cards', 'With tethered washable markers and hook-and-loop dots', 'Our Journey wall'],
+    ['Stations', 'LED diyas, flickering, in clay diyas', '50', 'diyas', 'Battery, replaceable; about 47 placed', 'Arti alcove'],
+    ['Stations', 'LED arti with tether and cradle', '1', 'set', 'Handled only if approved', 'Arti alcove'],
+    ['Stations', 'Offering tray and reusable flowers', '1', 'set', '12–20 flowers only if approved', 'Puja'],
+    ['Stations', 'Annakut food items', '60', 'items', 'Sealed sweets and fruit, or replicas for a multi-day run', 'Annakut'],
+    ['Stations', 'Thaal (brass plate)', '1', 'plate', '', 'Annakut'],
+    ['Stations', 'LED flicker flame with silk and fan', '1', 'unit', 'Low voltage, no heat', 'Ahimsa Yagna'],
+    ['Stations', 'Habit tiles', '8', 'tiles', '6 plus 2 spare', 'Ahimsa Yagna'],
+    ['Stations', 'Small hinges and magnetic catches', '6', 'sets', 'One per reveal door', 'Ahimsa Yagna'],
+    ['Lighting and power', 'Clamp-on LED spot, narrow beam (15–25°)', String(FIX.filter(r => r.ang < 0.25).length), 'lights', '3000K, 5–7 W, 12–20 in arm', '16 cards, 2 on the Yagna'],
+    ['Lighting and power', 'Clamp-on LED spot, medium beam (30–40°)', String(FIX.filter(r => r.ang >= 0.25 && r.ang < 0.45).length), 'lights', '3000K, 5–7 W, 12–20 in arm', 'Panels and the Journey wall'],
+    ['Lighting and power', 'Clamp-on LED spot, flood beam (about 60°)', String(FIX.filter(r => r.ang >= 0.45).length), 'lights', '3000K (2700K for the Annakut), 12–20 in arm', 'Name, Rice, Annakut'],
+    ['Lighting and power', 'Clamp-on LED spots (spares)', '3', 'lights', 'One of each beam', 'Spares'],
+    ['Lighting and power', 'Warm 3000K LED tape, 5 m reels', '10', 'reels', '8 for the strip (inside, top and bottom wash), 2 round the map', 'Timeline, map'],
+    ['Lighting and power', '24 V LED drivers', '4', 'drivers', '', 'LED tape'],
+    ['Lighting and power', 'Black extension cords, 25 ft', '12', 'cords', 'Run along the wall tops', 'All lights'],
+    ['Lighting and power', 'Power strips with surge protection', '5', 'strips', 'One per wall run', 'All lights'],
+    ['Lighting and power', 'Cord covers, gaffer tape, zip ties', '1', 'set', '4 rolls tape, 100 ties, 3 covers', 'Cables'],
+    ['Prints and graphics', 'Samskara cards, 18 × 27 in', '16', 'prints', '3 mm PVC or foam board', 'Timeline'],
+    ['Prints and graphics', 'Intro panels', '2', 'prints', 'Riti 1.8 × 5 ft, Parampara 7.4 × 5 ft', 'Intros'],
+    ['Prints and graphics', 'Parampara panels', '7', 'prints', 'Arti 3.8 × 3.4, Puja 5.3 × 4.4, Thaal and Bhav ≈5 × 4, Yoga 6 × 5, Tirth 2.6 and 2.8 × 5 ft', 'Parampara'],
+    ['Prints and graphics', 'Station wall panels, 3.6 × 1.1 ft', '2', 'prints', 'Name values, Rice guides', 'Name, Rice'],
+    ['Prints and graphics', 'Journey wall header and grid', '1', 'print', '5 × 4 ft', 'Our Journey wall'],
+    ['Prints and graphics', 'Name cards and challenge takeaways', '300', 'cards', '16–24 verified names', 'Name Studio'],
+    ['Prints and graphics', 'Virtue takeaway cards', '250', 'cards', '6 designs', 'Ahimsa Yagna'],
+    ['Hardware', 'Wood screws #8 1⅝ in and #9 3 in', '4', '5 lb boxes', '2 of each', 'Plywood and frames'],
+    ['Hardware', 'Carriage bolts ⅜ × 4 in with washers and nuts', '30', 'sets', 'Join wall sections', 'Walls'],
+    ['Hardware', 'Corner braces and mending plates', '40', 'pieces', '', 'Walls, boxes'],
+    ['Hardware', 'Wood glue, construction adhesive, hook-and-loop strips', '1', 'set', '', 'Boxes, prints']];
+  const MEDIA = [
+    [3, 'Samskara cards', 'Print', '16', '18 × 27 in, 150 dpi, artwork top, text below', 'Approved artwork, name, pronunciation and meaning for each (see Samskara card text). Pronunciations need review'],
+    [2, 'Timeline lettering', 'Fabrication', '6', 'Vector file for CNC, letters about 5 in tall', 'BEFORE BIRTH, NEW LIFE & NAME, FIRST STEPS, LEARNING, MARRIAGE, FAREWELL'],
+    [4, 'Riti intro panel', 'Print', '1', '1.8 × 5 ft', 'RITI, Sixteen Milestones. One Sacred Journey., key message'],
+    [5, 'Name value panel', 'Print', '1', '3.6 × 1.1 ft', 'Eight approved values'],
+    [5, 'Name cards', 'Print', '16–24', 'Card with English, script and meaning', 'Names verified with an approved reviewer; one-week challenge on the back'],
+    [6, 'Rice guides', 'Print', '6', 'Laminated templates plus 3.6 × 1.1 ft panel', 'ॐ, letters, seva, shanti, satya'],
+    [7, 'Journey wall board', 'Print', '1', '5 × 4 ft grid with header', 'What chapter of life are you living right now? plus 10–15 sample cards'],
+    [8, 'Parampara intro panel', 'Print', '1', '7.4 × 5 ft', 'Ancient Practices. Living Purpose.'],
+    [9, 'Arti panel', 'Print', '1', '3.8 × 3.4 ft, dark', 'Panel line and Tamaso ma jyotir gamaya; approved murti image'],
+    [9, 'Arti audio', 'Audio', 'Optional', 'Short loop, low volume, captions', 'Only with approval and usage rights'],
+    [10, 'Puja panel', 'Print', '1', '5.3 × 4.4 ft', 'Dhruva story, panel line, approved devotional image'],
+    [11, 'Thaal and Bhav panels', 'Print', '2', 'About 5 × 4 ft each', 'Thaal meaning; Shabari: bhav, not price'],
+    [11, 'Annakut food', 'From others', '≈60', 'Sealed or replica', 'Who prepares and refreshes it'],
+    [12, 'Yoga panel', 'Print', '1', '6 × 5 ft', 'Four paths and Arjuna’s lesson'],
+    [13, 'Habit tiles and virtue doors', 'Fabrication', '6 + 6', 'Tiles symbol-coded to doors', 'Approved pairings: anger → patience, ego → humility and so on'],
+    [13, 'Virtue cards', 'Print', '250', '6 designs', 'One concrete action for the week on each'],
+    [14, 'Map artwork', 'Fabrication', '1', 'Vector outline of India and Nepal, route, 13 stops', 'Route and stops confirmed with Pujya Santo'],
+    [15, 'Tirth Yatra panels', 'Print', '2', '2.6 and 2.8 × 5 ft', 'Nilkanth Varni story; pilgrim or tourist']];
+  const MTYPES = [['All', () => true], ['Print', t => t === 'Print'], ['Fabrication', t => t === 'Fabrication'], ['Audio', t => t === 'Audio'], ['From others', t => t === 'From others']];
+
+  function build2D() {
+    const S = 20, OX = 96, OY = 70, X = v => (OX + v * S).toFixed(1), Y = v => (OY + v * S).toFixed(1);
+    const out = [];
+    const rect = (x0, z0, x1, z1, cls) => out.push(`<rect x="${X(x0)}" y="${Y(z0)}" width="${((x1 - x0) * S).toFixed(1)}" height="${((z1 - z0) * S).toFixed(1)}" class="${cls}"/>`);
+    const line = (x0, z0, x1, z1, cls) => out.push(`<line x1="${X(x0)}" y1="${Y(z0)}" x2="${X(x1)}" y2="${Y(z1)}" class="${cls}"/>`);
+    const text = (x, z, t, cls, anchor) => out.push(`<text x="${X(x)}" y="${Y(z)}" class="${cls}" text-anchor="${anchor || 'middle'}" dominant-baseline="central">${t}</text>`);
+    const dim = (x0, z0, x1, z1, t, off) => { const dx = x1 - x0, dz = z1 - z0, L = Math.hypot(dx, dz), nx = -dz / L * 0.3, nz = dx / L * 0.3; line(x0, z0, x1, z1, 'p-dim'); line(x0 - nx, z0 - nz, x0 + nx, z0 + nz, 'p-dim'); line(x1 - nx, z1 - nz, x1 + nx, z1 + nz, 'p-dim'); const o = off || 0; text((x0 + x1) / 2 + (dz ? o : 0), (z0 + z1) / 2 + (dx ? o : 0), t, 'p-dimt'); };
+    const badge = (x, z, n) => out.push(`<g class="p-badge"><circle cx="${X(x)}" cy="${Y(z)}" r="9"/><text x="${X(x)}" y="${Y(z)}" text-anchor="middle" dominant-baseline="central">${n}</text></g>`);
+    const arc = (cx, cz, r, cls) => out.push(`<path d="M${X(cx)} ${Y(cz - r)} A${r * S} ${r * S} 0 0 1 ${X(cx + r)} ${Y(cz)} L${X(cx)} ${Y(cz)} Z" class="${cls}"/>`);
+    const wallRect = (f, a0, a1, d, cls) => { const p0 = lpos(f, a0, 0), p1 = lpos(f, a1, d); rect(Math.min(p0[0], p1[0]), Math.min(p0[1], p1[1]), Math.max(p0[0], p1[0]), Math.max(p0[1], p1[1]), cls); };
+    rect(21.2, 0, 40, 20, 'p-zr'); rect(0, 0, 21.2, 20, 'p-zp');
+    for (let x = 0; x <= 40; x++) line(x, 0, x, 20, 'p-grid'); for (let z = 0; z <= 20; z++) line(0, z, 40, z, 'p-grid');
+    out.push(`<text x="${X(30.6)}" y="${Y(11.2)}" class="p-zl" fill="var(--riti)" text-anchor="middle">RITI</text><text x="${X(6.5)}" y="${Y(4.8)}" class="p-zl" fill="var(--param)" text-anchor="middle">PARAMPARA</text>`);
+    SEC.forEach(s => { const p0 = lpos(s.f, Math.min(s.a, s.b), 0.19), p1 = lpos(s.f, Math.max(s.a, s.b), 0.19); line(p0[0], p0[1], p1[0], p1[1], 'p-strip'); s.ids.forEach((id, i) => { const [x, z] = lpos(s.f, cardA(s, i), 0.5); rect(x - 0.18, z - 0.18, x + 0.18, z + 0.18, 'p-card'); }); });
+    wallRect('E', 17.8, 19.6, 0.25, 'p-panel'); wallRect('DvW', 0.6, 8, 0.25, 'p-panel'); wallRect('S', 8.4, 13.7, 0.25, 'p-panel'); wallRect('S', 0.4, 5.5, 0.25, 'p-panel'); wallRect('W', 14.4, 19.6, 0.25, 'p-panel'); wallRect('W', 6.9, 12.9, 0.25, 'p-panel'); wallRect('N', 7.7, 10.3, 0.25, 'p-panel'); wallRect('N', 16.9, 19.7, 0.25, 'p-panel'); wallRect('S', 15.6, 19.4, 0.2, 'p-panel');
+    rect(37.8, 2.6, 39.8, 6.6, 'p-piece'); rect(28.3, 0.2, 32.3, 2.2, 'p-piece'); rect(23.5, 18.55, 28.5, 19.8, 'p-piece'); wallRect('S', 23.5, 28.5, 0.25, 'p-panel');
+    rect(15.3, 18.4, 19.7, 19.8, 'p-piece'); rect(16.9, 17.2, 18.1, 18.2, 'p-piece'); rect(15.1, 16, 19.9, 20, 'p-dash');
+    for (let i = 0; i < 9; i++) [18.6, 19.0, 19.5].forEach(z => out.push(`<circle cx="${X(15.55 + i * 0.5)}" cy="${Y(z)}" r="2.2" class="p-diya"/>`));
+    rect(9.3, 18.3, 12.8, 19.8, 'p-piece');
+    [5, 3.9, 2.8, 1.7].forEach(r => arc(0.18, 19.82, r, 'p-tier'));
+    rect(10.9, 7.1, 14.9, 11.1, 'p-piece'); rect(11.9, 8.1, 13.9, 10.1, 'p-dash'); rect(9.9, 7.4, 10.9, 10.8, 'p-piece');
+    rect(10.7, 0.375, 16.5, 0.72, 'p-map');
+    WALLS.forEach(([a, b]) => line(a[0], a[1], b[0], b[1], 'p-wall'));
+    const baseOut = out.slice();
+    dim(0, -1.4, 40, -1.4, '40 ft', -0.6); dim(41.4, 0, 41.4, 20, '20 ft', 1.1);
+    dim(0, 21.4, 21.2, 21.4, 'Parampara 21.2 ft', 0.6); dim(21.2, 21.4, 40, 21.4, 'Riti 18.8 ft', 0.6);
+    dim(31.5, 20.6, 36.5, 20.6, 'Entry 5 ft', 0.55); dim(-1.4, 1.5, -1.4, 6, '4½ ft', -1.0); text(-2.6, 7.4, 'Exit', 'p-note', 'middle');
+    dim(38.2, 0.6, 38.2, 17.6, 'East run 17 ft', -1.1); dim(22, 5.6, 39.4, 5.6, 'North run 17.4 ft', 0.55); dim(23.1, 0.6, 23.1, 8.2, '7.6 ft', 0.9);
+    dim(37.3, 2.6, 37.3, 6.6, '4 ft', -0.9); dim(28.3, 2.8, 32.3, 2.8, '4 ft', 0.5); dim(23.5, 18, 28.5, 18, '5 ft', -0.5);
+    dim(15.1, 15.4, 19.9, 15.4, 'Alcove 4.8 ft', -0.5); dim(14.5, 16, 14.5, 20, '4 ft', -0.8);
+    dim(8.4, 17.5, 13.7, 17.5, '5.3 ft', -0.5); dim(0.18, 14.4, 5.18, 14.4, 'r 5 ft', -0.5); dim(1.5, 6.9, 1.5, 12.9, '6 ft', 0.8);
+    dim(10.9, 11.8, 14.9, 11.8, '4 ft', 0.5); dim(12.4, 0.72, 12.4, 7.1, '6.4 ft', -0.9); dim(14.9, 9.1, 21.0, 9.1, '6.1 ft', -0.5); dim(13.4, 11.1, 13.4, 18.3, '7.2 ft', 0.9);
+    dim(10.7, 1.4, 16.5, 1.4, 'Map 5.8 ft', 0.5);
+    [[39.3, 18.7, 4], [36.4, 9.5, 2], [38.3, 13, 3], [38.8, 4.6, 5], [30.3, 1.2, 6], [26, 19.2, 7], [20.6, 4.3, 8], [17.5, 17.2, 9], [11.05, 19.05, 10], [2.2, 17.6, 11], [0.8, 9.9, 12], [12.9, 9.1, 13], [13.6, 0.55, 14], [9, 0.7, 15], [18.3, 0.7, 15], [30.6, 8.4, 1]].forEach(([x, z, n]) => badge(x, z, n));
+    text(-0.2, -2.9, 'N ↑', 'p-note', 'start'); text(34, 22.8, 'Entry', 'p-note', 'middle');
+    const svg = `<svg viewBox="0 0 1000 560" role="img" aria-label="Dimensioned floor plan of the Riti and Parampara section, 40 by 20 feet"><title>Riti and Parampara floor plan</title>${out.join('')}</svg>`;
+    const lo = baseOut.slice();
+    FIX.forEach(r => lo.push(`<line x1="${X(r.c[0])}" y1="${Y(r.c[2])}" x2="${X(r.t[0])}" y2="${Y(r.t[2])}" class="p-aim"/>`));
+    FIX.forEach(r => lo.push(`<g class="p-fix"><circle cx="${X(r.c[0])}" cy="${Y(r.c[2])}" r="8.5"/><text x="${X(r.c[0])}" y="${Y(r.c[2])}" text-anchor="middle" dominant-baseline="central">${r.n}</text></g>`));
+    const lsvg = `<svg viewBox="0 0 1000 560" role="img" aria-label="Spot light plan with ${FIX.length} numbered spots"><title>Spot light plan</title>${lo.join('')}</svg>`;
+    const lrows = FIX.map(r => `<tr><td class="n"><span class="lf">${r.n}</span></td><td>${r.zone}</td><td><b>${r.what}</b></td><td>${r.on}</td><td>${beamWord(r.ang)}</td></tr>`).join('');
+    const bomEsc = v => /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+    const bomCSV = () => '﻿' + ['Group,Item,Qty,Unit,Spec,Used for'].concat(BOM.map(r => r.map(bomEsc).join(','))).join('\n');
+    let lastGroup = '';
+    const bomRows = BOM.map(([grpName, item, qty, unit, spec, use]) => { const head = grpName !== lastGroup ? `<tr class="grp"><td colspan="4">${grpName}</td></tr>` : ''; lastGroup = grpName; return head + `<tr><td><b>${item}</b>${spec ? `<div class="spec">${spec}</div>` : ''}</td><td class="q">${qty}</td><td>${unit}</td><td>${use}</td></tr>`; }).join('');
+    const sumQ = f => BOM.filter(f).reduce((a, r) => a + Number(r[2]), 0);
+    const half = sumQ(r => r[1].startsWith('½ in plywood')), three = sumQ(r => r[1].startsWith('¾ in plywood')), bend = sumQ(r => r[1].startsWith('¼ in bending'));
+    const bomStats = [[half + three + bend, '4 × 8 plywood sheets in all', 'key'], [half, 'sheets ½ in plywood'], [three, 'sheets ¾ in plywood'], [bend, 'sheets ¼ in bending ply'], [sumQ(r => r[1].startsWith('2 × 4 × 8')), '2 × 4 × 8 studs'], [sumQ(r => r[1].includes('foam board')), 'foam sheets'], [sumQ(r => r[1].startsWith('Clamp-on LED')), 'spot lights incl. spares']].map(([n, t, k]) => `<div class="stat${k ? ' ' + k : ''}"><b>${n}</b><span>${t}</span></div>`).join('');
+    const rows = MATERIALS.map(([n, piece, size, mat, qty]) => `<tr><td class="n"><span>${n}</span></td><td><b>${piece}</b></td><td>${size}</td><td>${mat}</td><td class="q">${qty}</td></tr>`).join('');
+    const mrow = ([n, a, t, q, spec, need]) => `<tr data-type="${t}"><td class="n"><span>${n}</span></td><td><b>${a}</b></td><td><span class="mtype">${t}</span></td><td class="q">${q}</td><td>${spec}</td><td>${need}</td></tr>`;
+    const chips = MTYPES.map(([name, f], i) => `<button type="button" class="chip" data-f="${i}" aria-pressed="${i === 0}">${name} <span>${MEDIA.filter(m => f(m[2])).length}</span></button>`).join('');
+    const p2 = $('plan2d');
+    p2.innerHTML = `
+      <div class="tabs" role="tablist" aria-label="2D views">
+        <button type="button" role="tab" data-tab="plan" aria-selected="true">Floor plan</button>
+        <button type="button" role="tab" data-tab="mat" aria-selected="false">Materials <span class="cnt">${half + three + bend} sheets</span></button>
+        <button type="button" role="tab" data-tab="media" aria-selected="false">Media assets <span class="cnt">${MEDIA.length}</span></button>
+        <button type="button" role="tab" data-tab="light" aria-selected="false">Lighting <span class="cnt">${FIX.length}</span></button>
+      </div>
+      <div data-panel="plan" role="tabpanel">
+        <div class="plan-head"><h3>Floor plan</h3><p>1 square = 1 ft · walls 8 ft high · numbers match the materials and media lists · gold line is the lit timeline</p></div>
+        <div class="plan-scroll">${svg}</div>
+      </div>
+      <div data-panel="mat" role="tabpanel" hidden>
+        <div class="plan-head"><h3>Shopping list</h3><p>Quantities worked out from the layout, as planning estimates. Confirm them with the build team and the venue before ordering; every outer wall the hall already provides saves its sheets.</p></div>
+        <div class="bom-stats">${bomStats}</div>
+        <div class="media-bar"><button type="button" class="chip" id="bomExport">Export CSV</button><button type="button" class="chip" id="bomCopy">Copy list</button><span class="copy-msg" id="bomMsg" aria-live="polite"></span></div>
+        <div class="mat-scroll"><table class="mat bom"><thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th>Used for</th></tr></thead><tbody>${bomRows}</tbody></table></div>
+        <div class="plan-head" style="margin-top:22px"><h3>Pieces and sizes</h3><p>What each numbered piece is made of</p></div>
+        <div class="mat-scroll"><table class="mat"><thead><tr><th>#</th><th>Piece</th><th>Size</th><th>Materials</th><th>Qty</th></tr></thead><tbody>${rows}</tbody></table></div>
+      </div>
+      <div data-panel="media" role="tabpanel" hidden>
+        <div class="plan-head"><h3>Media assets to create</h3><p>Everything that needs writing, design, printing, cutting or sourcing. Numbers match the floor plan.</p></div>
+        <div class="media-bar"><div class="chips" role="group" aria-label="Filter by type">${chips}</div><button type="button" class="chip copy" id="mediaCopy">Copy list</button><span class="copy-msg" id="mediaMsg" aria-live="polite"></span></div>
+        <div class="mat-scroll"><table class="mat media"><thead><tr><th>#</th><th>Asset</th><th>Type</th><th>Qty</th><th>Size and spec</th><th>What it needs</th></tr></thead><tbody>${MEDIA.map(mrow).join('')}</tbody></table></div>
+      </div>
+      <div data-panel="light" role="tabpanel" hidden>
+        <div class="plan-head"><h3>Spot lights</h3><p>${FIX.length} clamp-on spots, buy ${FIX.length + 3} with spares · 3000K warm white (2700K on the Annakut) · all on wall tops, no ceiling rigging</p></div>
+        <div class="plan-scroll">${lsvg}</div>
+        <p class="light-note">Not counted as spots: the LED tape inside the timeline strip and behind the map, the ≈47 LED diyas and the LED arti in the alcove (it gets no spot on purpose), and the Yagna’s flicker flame. Plan one power strip per wall run, with black cords along the wall tops.</p>
+        <div class="mat-scroll"><table class="mat"><thead><tr><th>#</th><th>Zone</th><th>Lights</th><th>Clamped to</th><th>Beam</th></tr></thead><tbody>${lrows}</tbody></table></div>
+      </div>`;
+    p2.querySelectorAll('[role="tab"]').forEach(t => t.addEventListener('click', () => { p2.querySelectorAll('[role="tab"]').forEach(o => o.setAttribute('aria-selected', String(o === t))); p2.querySelectorAll('[data-panel]').forEach(pn => { pn.hidden = pn.dataset.panel !== t.dataset.tab; }); }));
+    let mf = 0;
+    p2.querySelectorAll('.chip[data-f]').forEach(c => c.addEventListener('click', () => { mf = Number(c.dataset.f); p2.querySelectorAll('.chip[data-f]').forEach(o => o.setAttribute('aria-pressed', String(o === c))); p2.querySelectorAll('table.media tbody tr').forEach(r => { r.hidden = !MTYPES[mf][1](r.dataset.type); }); }));
+    const bomMsg = $('bomMsg');
+    $('bomExport').addEventListener('click', async () => {
+      const name = 'riti-parampara-shopping-list.csv'; let dl = null;
+      try { if (window.claude && claude.use) dl = await claude.use('downloads'); } catch (e) { dl = null; }
+      if (!dl) { bomMsg.textContent = 'Download is not available here. Use Copy list instead.'; return; }
+      try { await dl.save({ filename: name, data: bomCSV() }); bomMsg.textContent = 'Saved ' + name + '.'; }
+      catch (e) { bomMsg.textContent = e && e.code === 'declined' ? 'Download cancelled.' : 'Download is not available here. Use Copy list instead.'; }
+    });
+    $('bomCopy').addEventListener('click', () => {
+      const txt = ['Group\tItem\tQty\tUnit\tSpec\tUsed for'].concat(BOM.map(r => r.join('\t'))).join('\n');
+      const done = ok => { bomMsg.textContent = ok ? 'Copied ' + BOM.length + ' lines. Paste into a sheet.' : 'Copy is blocked here. Select the table and copy it instead.'; };
+      try { navigator.clipboard.writeText(txt).then(() => done(true), () => done(false)); } catch (e) { done(false); }
+    });
+    const msg = $('mediaMsg');
+    $('mediaCopy').addEventListener('click', () => {
+      const list = MEDIA.filter(m => MTYPES[mf][1](m[2])); const txt = ['#\tAsset\tType\tQty\tSize and spec\tWhat it needs'].concat(list.map(m => m.join('\t'))).join('\n');
+      const done = ok => { msg.textContent = ok ? 'Copied ' + list.length + ' assets. Paste into a sheet or doc.' : 'Copy is blocked here. Select the table and copy it instead.'; };
+      try { navigator.clipboard.writeText(txt).then(() => done(true), () => done(false)); } catch (e) { done(false); }
+    });
+  }
+
+  // ---------- loop ----------
+  function resize() { const w = viewer.clientWidth, h = viewer.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+  window.addEventListener('resize', () => { if (mode === '2d') return; resize(); if (mode === 'overview' || mode === 'plan') setMode(mode); });
+  const tmp = new THREE.Vector3(), wrapAngle = a => Math.atan2(Math.sin(a), Math.cos(a));
+  const place = (el, pos, w, h) => { tmp.copy(pos).project(camera); if (tmp.z > 1 || tmp.x < -1.1 || tmp.x > 1.1 || tmp.y < -1.1 || tmp.y > 1.1) { el.hidden = true; return; } el.hidden = false; el.style.left = ((tmp.x + 1) / 2 * w) + 'px'; el.style.top = ((1 - tmp.y) / 2 * h) + 'px'; };
+  let last = performance.now();
+  function tick(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    const fast = keys.ShiftLeft || keys.ShiftRight ? 2 : 1;
+    if (mode === 'roam') {
+      if (keys.ArrowLeft || keys.KeyQ) roam.yaw += 1.9 * dt; if (keys.ArrowRight || keys.KeyE) roam.yaw -= 1.9 * dt;
+      const f = (keys.KeyW || keys.ArrowUp ? 1 : 0) - (keys.KeyS || keys.ArrowDown ? 1 : 0), r = (keys.KeyD ? 1 : 0) - (keys.KeyA ? 1 : 0);
+      const sp = 6 * fast * dt, sy = Math.sin(roam.yaw), cy = Math.cos(roam.yaw);
+      const p = { x: roam.x + (-sy * f + cy * r) * sp, z: roam.z + (-cy * f - sy * r) * sp }; collide(p); roam.x = p.x; roam.z = p.z;
+      camera.up.set(0, 1, 0); camera.position.set(roam.x, EYE, roam.z); camera.rotation.set(roam.pitch, roam.yaw, 0);
+    } else if (mode === 'walk' && walkCurve) {
+      if (tour.playing) {
+        if (tour.hold > 0) tour.hold -= dt;
+        else { tour.t += dt * 3.0 / walkCurve.getLength(); if (tour.next < stopU.length && tour.t >= stopU[tour.next]) { tour.t = stopU[tour.next]; tour.hold = 3; tour.look = STOPS[tour.next][2]; tour.next++; } if (tour.t >= 1) { tour.t = 1; tour.playing = false; } }
+        syncTour();
+      }
+      const p = walkCurve.getPointAt(Math.min(1, tour.t)), q = walkCurve.getPointAt(Math.min(1, tour.t + 0.02));
+      let want = null;
+      if (tour.hold > 0 && tour.look) want = Math.atan2(-(tour.look[0] - p.x), -(tour.look[1] - p.z)); else if (q.distanceTo(p) > 0.01) want = Math.atan2(-(q.x - p.x), -(q.z - p.z));
+      if (want !== null) tour.yaw = tour.yaw === null ? want : tour.yaw + wrapAngle(want - tour.yaw) * Math.min(1, dt * 2.6);
+      if (tour.playing && !drag) { const k = Math.min(1, dt * 0.7); tour.yawOff *= 1 - k; tour.pitchOff *= 1 - k; }
+      camera.up.set(0, 1, 0); camera.position.copy(p); camera.rotation.set(-0.06 + tour.pitchOff, (tour.yaw || 0) + tour.yawOff, 0);
+    } else {
+      const pf = (keys.KeyW || keys.ArrowUp ? 1 : 0) - (keys.KeyS || keys.ArrowDown ? 1 : 0), pr = (keys.KeyD || keys.ArrowRight ? 1 : 0) - (keys.KeyA || keys.ArrowLeft ? 1 : 0);
+      if (pf || pr) { freeOrbit(); const s = orbit.radius * 0.6 * fast * dt, st = Math.sin(orbit.theta), ct = Math.cos(orbit.theta); goal.target.x += (pr * ct - pf * st) * s; goal.target.z += (-pr * st - pf * ct) * s; goal.target.x = THREE.MathUtils.clamp(goal.target.x, -5, 45); goal.target.z = THREE.MathUtils.clamp(goal.target.z, -5, 25); }
+      if (keys.KeyQ) { goal.theta += 1.4 * dt; freeOrbit(); } if (keys.KeyE) { goal.theta -= 1.4 * dt; freeOrbit(); }
+      const k = 1 - Math.pow(0.0015, dt);
+      orbit.target.lerp(goal.target, k); orbit.theta += (goal.theta - orbit.theta) * k; orbit.phi += (goal.phi - orbit.phi) * k; orbit.radius += (goal.radius - orbit.radius) * k;
+      const sp = Math.sin(orbit.phi);
+      camera.position.set(orbit.target.x + orbit.radius * sp * Math.sin(orbit.theta), orbit.target.y + orbit.radius * Math.cos(orbit.phi), orbit.target.z + orbit.radius * sp * Math.cos(orbit.theta));
+      camera.up.set(0, 1, 0); if (orbit.phi < 0.01) camera.up.set(-Math.sin(orbit.theta), 0, -Math.cos(orbit.theta)); camera.lookAt(orbit.target);
+    }
+    const t = now / 1000;
+    if (flame) { const f = 1 + Math.sin(t * 9) * 0.06 + Math.sin(t * 23) * 0.04; flame.scale.set(1, f, 1); flameL.intensity = 1.2 * f; }
+    diyaMats.forEach((m, i) => m.color.setRGB(1, 0.56 + 0.1 * Math.sin(t * (7 + i * 3) + i * 2), 0.18 + 0.06 * Math.sin(t * 11 + i)));
+    if (alcL) alcL.intensity = 1.1 * (1 + 0.08 * Math.sin(t * 8) + 0.05 * Math.sin(t * 19));
+    if (mode === '2d') { requestAnimationFrame(tick); return; }
+    dimGroup.visible = showDims; clearGroup.visible = showClear; spotGroup.visible = showSpots;
+    pathGroup.visible = showPath && mode !== 'walk' && mode !== 'roam'; stepWalker(dt, now);
+    renderer.render(scene, camera);
+    const w = viewer.clientWidth, h = viewer.clientHeight;
+    const vis = showLabels && !showDims && !showClear && !showSpots && mode !== 'walk' && mode !== 'roam';
+    SPOTTAGS.forEach(d => { if (!showSpots) { d.el.hidden = true; return; } place(d.el, d.pos, w, h); });
+    CLEARS.forEach(c => { if (!showClear || mode === 'walk' || mode === 'roam') { c.el.hidden = true; return; } place(c.el, c.pos, w, h); });
+    DIMS.forEach(d => { if (!showDims) { d.el.hidden = true; return; } place(d.el, d.pos, w, h); });
+    labelEls.forEach(({ el, pos }) => { if (!vis) { el.hidden = true; return; } place(el, pos, w, h); });
+    requestAnimationFrame(tick);
+  }
+
+  const fontsReady = Promise.race([Promise.all(['40px Marcellus', '500 20px Mukta', '600 20px Mukta', '400 20px Mukta'].map(f => document.fonts.load(f))), new Promise(res => setTimeout(res, 2500))]).catch(() => {});
+  const loadingEl = $('loading');
+  canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); loadingEl.hidden = false; loadingEl.textContent = 'The 3D view stopped. Reload the page to see it again.'; });
+  fontsReady.then(() => {
+    try {
+      const [pc, pg] = cv(256, 256); const gr = pg.createRadialGradient(128, 100, 4, 128, 110, 135); gr.addColorStop(0, 'rgba(255,232,190,.9)'); gr.addColorStop(0.55, 'rgba(255,214,160,.35)'); gr.addColorStop(1, 'rgba(255,200,140,0)'); pg.fillStyle = gr; pg.fillRect(0, 0, 256, 256);
+      poolMat = new THREE.MeshBasicMaterial({ map: T(pc), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.42 });
+      buildFloor(); buildWalls(); buildRiti(haloTex()); buildParampara(); buildRoute(); buildLights(); buildFixtures(); applyLights(); buildStops(); buildDims(); buildClearance(); build2D();
+      resize(); setMode('overview'); orbit.radius = goal.radius; orbit.target.copy(goal.target);
+      loadingEl.hidden = true;
+      requestAnimationFrame(tt => { last = tt; tick(tt); });
+    } catch (err) {
+      loadingEl.hidden = false; loadingEl.textContent = 'The 3D view could not load on this device (' + (err && err.message ? err.message : 'unknown error') + '). Try reloading, or open it in Chrome or Safari on a laptop.'; console.error(err);
+    }
+  });
+})();
+</script>
+
+</body></html>
