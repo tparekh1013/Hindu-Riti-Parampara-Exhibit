@@ -97,6 +97,27 @@ h1 span { font: 600 0.28em var(--mono); letter-spacing: 0.12em; vertical-align: 
 .sw.g { background: #34c76e; } .sw.a { background: #f2a83c; } .sw.b { background: #6092f0; } .sw.r { background: #c0392b; }
 .viewer.is2d { height: auto; background: var(--surface); border: 1px solid var(--line); touch-action: auto; }
 .viewer.is2d canvas, .viewer.is2d #labels, .viewer.is2d .scale, .viewer.is2d .hint, .viewer.is2d .zoomctl, .viewer.is2d #card, .viewer.is2d .pad, .viewer.is2d .tour, .viewer.is2d .clear-legend, .viewer.is2d .spot-legend { display: none !important; }
+#struct2d { padding: 20px; display: grid; gap: 14px; color: var(--fg); }
+#struct2d .plan-head { align-items: center; }
+#struct2d .s-print { margin-left: auto; }
+.s-wall { fill: var(--fg); }
+.s-gap { stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 4 4; }
+.s-open { fill: var(--muted); font: 600 10px var(--mono); letter-spacing: 0.14em; }
+.s-ext { stroke: var(--muted); stroke-width: 0.7; stroke-opacity: 0.7; }
+.s-dim { stroke: var(--accent); stroke-width: 1.1; }
+.s-tick { stroke: var(--accent); stroke-width: 1.8; }
+.s-dimt { fill: var(--fg); font: 600 12px var(--mono); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.s-note { fill: var(--muted); font: 600 11px var(--mono); letter-spacing: 0.06em; }
+.s-tag circle { fill: var(--surface); stroke: var(--accent); stroke-width: 1.6; }
+.s-tag text { fill: var(--fg); font: 700 11px var(--body); }
+.s-sb0 { fill: var(--fg); } .s-sb1 { fill: var(--surface); stroke: var(--fg); stroke-width: 0.8; }
+@media print {
+  body.print-struct * { visibility: hidden !important; }
+  body.print-struct #struct2d, body.print-struct #struct2d * { visibility: visible !important; }
+  body.print-struct #struct2d { position: absolute; left: 0; top: 0; width: 100%; padding: 0; }
+  body.print-struct #struct2d .s-print { display: none; }
+  body.print-struct .plan-scroll svg { min-width: 0; }
+}
 #plan2d { padding: 20px; display: grid; gap: 14px; color: var(--fg); }
 .plan-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
 .plan-head h3 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 25px; }
@@ -211,6 +232,7 @@ h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 31px; 
         <button class="btn play" id="vWalk" type="button" aria-pressed="false">▶ Walk through</button>
         <button class="btn" id="vRoam" type="button" aria-pressed="false">Walk around</button>
         <button class="btn" id="v2d" type="button" aria-pressed="false">2D plan, materials + lighting</button>
+        <button class="btn" id="vStruct" type="button" aria-pressed="false">Structure plan</button>
       </div>
       <span class="sep" aria-hidden="true"></span>
       <div class="group" role="group" aria-label="Go to">
@@ -279,6 +301,7 @@ h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 31px; 
       <div class="clear-legend" id="clearLegend" hidden><span><i class="sw g"></i>Clear walkway</span><span><i class="sw a"></i>People using it</span><span><i class="sw b"></i>Readers / viewers</span><span><i class="sw r"></i>Under 3′6″</span></div>
       <div class="spot-legend" id="spotLegend" hidden><b id="spotCount">Spot lights</b><span>Numbers match the Lighting tab in the 2D view</span></div>
       <div id="plan2d" hidden></div>
+      <div id="struct2d" hidden></div>
       <div id="loading">Loading model…</div>
     </div>
   </section>
@@ -2055,17 +2078,18 @@ window.RP_SIL={"couple":{"w":16.31,"h":33.66,"p":[2.74,33.58,2.36,33.39,2.01,33.
   const keys = {};
   function fitRadius(base) { const a = viewer.clientWidth / Math.max(1, viewer.clientHeight); return base * Math.max(1, 1.7 / a); }
   function setGoal(o) { Object.keys(o).forEach(k => { if (k === 'target') goal.target.copy(o.target); else goal[k] = o[k]; }); }
-  const btn = { overview: $('vOverview'), plan: $('vPlan'), walk: $('vWalk'), roam: $('vRoam'), d2: $('v2d') };
+  const btn = { overview: $('vOverview'), plan: $('vPlan'), walk: $('vWalk'), roam: $('vRoam'), d2: $('v2d'), st: $('vStruct') };
+  const flat = m => m === '2d' || m === 'struct';
   const tourEl = $('tour'), padEl = $('pad'), zoomEl = $('zoomCtl'), hintEl = $('hint'), scaleEl = $('scaleNote');
   const tourPlay = $('tourPlay'), tourBar = $('tourBar'), tourStops = $('tourStops');
   const HINTS = { orbit: 'Double-click a spot to zoom in · WASD to move · Q/E to turn', roam: 'Drag to look · WASD, arrow keys or the pad to move · Shift for faster' };
   function setMode(m) {
     const prev = mode; mode = m;
     btn.overview.setAttribute('aria-pressed', String(m === 'overview')); btn.plan.setAttribute('aria-pressed', String(m === 'plan'));
-    btn.walk.setAttribute('aria-pressed', String(m === 'walk')); btn.roam.setAttribute('aria-pressed', String(m === 'roam')); btn.d2.setAttribute('aria-pressed', String(m === '2d'));
+    btn.walk.setAttribute('aria-pressed', String(m === 'walk')); btn.roam.setAttribute('aria-pressed', String(m === 'roam')); btn.d2.setAttribute('aria-pressed', String(m === '2d')); btn.st.setAttribute('aria-pressed', String(m === 'struct'));
     const was2d = viewer.classList.contains('is2d');
-    viewer.classList.toggle('is2d', m === '2d'); $('plan2d').hidden = m !== '2d';
-    if (was2d && m !== '2d') resize();
+    viewer.classList.toggle('is2d', flat(m)); $('plan2d').hidden = m !== '2d'; $('struct2d').hidden = m !== 'struct';
+    if (was2d && !flat(m)) resize();
     btn.walk.textContent = m === 'walk' ? '■ Stop walk-through' : '▶ Walk through';
     btn.roam.textContent = m === 'roam' ? '■ Stop walking' : 'Walk around';
     tourEl.hidden = m !== 'walk'; padEl.hidden = m !== 'roam'; zoomEl.hidden = m === 'walk' || m === 'roam';
@@ -2080,12 +2104,13 @@ window.RP_SIL={"couple":{"w":16.31,"h":33.66,"p":[2.74,33.58,2.36,33.39,2.01,33.
   btn.walk.addEventListener('click', () => setMode(mode === 'walk' ? 'overview' : 'walk'));
   btn.roam.addEventListener('click', () => setMode(mode === 'roam' ? 'overview' : 'roam'));
   btn.d2.addEventListener('click', () => setMode(mode === '2d' ? 'overview' : '2d'));
+  btn.st.addEventListener('click', () => setMode(mode === 'struct' ? 'overview' : 'struct'));
   function freeOrbit() { if (mode === 'overview' || mode === 'plan') { mode = 'free'; btn.overview.setAttribute('aria-pressed', 'false'); btn.plan.setAttribute('aria-pressed', 'false'); } }
 
   const ZONES = { riti: { at: [30.5, 9], roam: [37.5, 16.5, 0], stop: 1 }, parampara: { at: [10.5, 10], roam: [22.5, 12.6, Math.PI / 2], stop: 8 } };
   document.querySelectorAll('[data-zone]').forEach(b => b.addEventListener('click', () => {
     const Z = ZONES[b.dataset.zone];
-    if (mode === '2d') setMode('free');
+    if (flat(mode)) setMode('free');
     if (mode === 'roam') { roam.x = Z.roam[0]; roam.z = Z.roam[1]; roam.yaw = Z.roam[2]; roam.pitch = -0.05; return; }
     if (mode === 'walk') { jumpStop(Z.stop); return; }
     mode = 'free'; ['overview', 'plan'].forEach(k => btn[k].setAttribute('aria-pressed', 'false'));
@@ -2175,7 +2200,7 @@ window.RP_SIL={"couple":{"w":16.31,"h":33.66,"p":[2.74,33.58,2.36,33.39,2.01,33.
     if (fly && mode !== 'walk') { mode = 'free'; ['overview', 'plan'].forEach(k => btn[k].setAttribute('aria-pressed', 'false')); setGoal({ target: new THREE.Vector3(it.at[0], 2.5, it.at[1]), radius: id === 'timeline' ? 24 : 15, theta: it.view, phi: 0.95 }); }
   }
   document.querySelectorAll('[data-item]').forEach(b => b.addEventListener('click', () => {
-    if (mode === 'walk' || mode === 'roam' || mode === '2d') setMode('free');
+    if (mode === 'walk' || mode === 'roam' || flat(mode)) setMode('free');
     openCard(b.dataset.item, true); viewer.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
   }));
   const labelBox = $('labels'); const labelEls = [];
@@ -2359,6 +2384,100 @@ window.RP_SIL={"couple":{"w":16.31,"h":33.66,"p":[2.74,33.58,2.36,33.39,2.01,33.
     [15, 'Tirth Yatra wall posters', 'Print', '6', 'Tirth Yatra 31 × 60 in, five tirth posters 2 × 3 ft', 'Dwarka, Rameshwaram, Jagannath Puri, Kashi, Badrinath; facts need approval']];
   const MTYPES = [['All', () => true], ['Print', t => t === 'Print'], ['Fabrication', t => t === 'Fabrication'], ['Audio', t => t === 'Audio'], ['From others', t => t === 'From others']];
 
+  // ---------- Structure plan: walls only, fully dimensioned, for the build crew ----------
+  function buildStruct() {
+    // Wall centre lines in feet. x runs west → east (0–40), z runs north → south (0–20).
+    const SW = [
+      { id: 'A', name: 'North wall', a: [0, 0], b: [40, 0], tag: [20, -0.9] },
+      { id: 'B', name: 'East wall', a: [40, 0], b: [40, 16], tag: [40.9, 8] },
+      { id: 'C', name: 'South wall', a: [0, 20], b: [40, 20], tag: [3.5, 20.9] },
+      { id: 'D', name: 'West wall', a: [0, 0], b: [0, 2], tag: null },
+      { id: 'D', name: 'West wall', a: [0, 6], b: [0, 20], tag: [-0.9, 13] },
+      { id: 'E', name: 'Divider', a: [21.2, 0], b: [21.2, 8.5], tag: [20.3, 4.2] },
+      { id: 'F', name: 'Entry wall', a: [30.6, 12], b: [30.6, 20], tag: [29.7, 14] },
+      { id: 'G', name: 'Alcove wall, west', a: [17.8, 16], b: [17.8, 20], tag: [16.9, 17.2] },
+      { id: 'H', name: 'Alcove wall, east', a: [22.6, 16], b: [22.6, 20], tag: [24.4, 17.2] }
+    ];
+    const T = 0.35; // wall thickness used in the model, about 4 in
+    const fi = ft => { // feet → 21′-2⅜″, to the nearest ⅛ in
+      let e = Math.round(ft * 96), f = Math.floor(e / 96); e -= f * 96; let inch = Math.floor(e / 8), r = e % 8;
+      const fr = ['', '⅛', '¼', '⅜', '½', '⅝', '¾', '⅞'][r];
+      return `${f}′-${inch}${fr}″`;
+    };
+    const S = 20, OX = 130, OY = 120, X = v => (OX + v * S).toFixed(1), Y = v => (OY + v * S).toFixed(1);
+    const out = [];
+    const ln = (x0, z0, x1, z1, cls) => out.push(`<line x1="${X(x0)}" y1="${Y(z0)}" x2="${X(x1)}" y2="${Y(z1)}" class="${cls}"/>`);
+    const tx = (x, z, t, cls, rot, anchor) => out.push(`<text x="${X(x)}" y="${Y(z)}" class="${cls}" text-anchor="${anchor || 'middle'}" dominant-baseline="central"${rot ? ` transform="rotate(-90 ${X(x)} ${Y(z)})"` : ''}>${t}</text>`);
+    // horizontal dimension along z = zd from x0 to x1 (ext lines drawn from zFrom)
+    const dh = (x0, x1, zd, zFrom, label) => {
+      [x0, x1].forEach(x => ln(x, zFrom, x, zd + (zd > zFrom ? 0.35 : -0.35), 's-ext'));
+      ln(x0, zd, x1, zd, 's-dim');
+      [x0, x1].forEach(x => ln(x - 0.25, zd + 0.25, x + 0.25, zd - 0.25, 's-tick'));
+      tx((x0 + x1) / 2, zd - 0.55, label || fi(x1 - x0), 's-dimt');
+    };
+    // vertical dimension along x = xd from z0 to z1
+    const dv = (z0, z1, xd, xFrom, label) => {
+      [z0, z1].forEach(z => ln(xFrom, z, xd + (xd > xFrom ? 0.35 : -0.35), z, 's-ext'));
+      ln(xd, z0, xd, z1, 's-dim');
+      [z0, z1].forEach(z => ln(xd - 0.25, z + 0.25, xd + 0.25, z - 0.25, 's-tick'));
+      tx(xd - 0.55, (z0 + z1) / 2, label || fi(z1 - z0), 's-dimt', true);
+    };
+
+    // walls as solid bars at true thickness
+    SW.forEach(w => {
+      const hz = w.a[1] === w.b[1];
+      const x0 = Math.min(w.a[0], w.b[0]) - (hz ? T / 2 : T / 2), x1 = Math.max(w.a[0], w.b[0]) + T / 2;
+      const z0 = Math.min(w.a[1], w.b[1]) - T / 2, z1 = Math.max(w.a[1], w.b[1]) + T / 2;
+      out.push(`<rect x="${X(x0)}" y="${Y(z0)}" width="${((x1 - x0) * S).toFixed(1)}" height="${((z1 - z0) * S).toFixed(1)}" class="s-wall"/>`);
+    });
+    // openings
+    tx(39.2, 18, 'ENTRY', 's-open', true); tx(0.8, 4, 'EXIT', 's-open', true);
+    ln(40, 16, 40, 20, 's-gap'); ln(0, 2, 0, 6, 's-gap');
+    // wall tags
+    SW.forEach(w => { if (!w.tag) return; out.push(`<g class="s-tag"><circle cx="${X(w.tag[0])}" cy="${Y(w.tag[1])}" r="10"/><text x="${X(w.tag[0])}" y="${Y(w.tag[1])}" text-anchor="middle" dominant-baseline="central">${w.id}</text></g>`); });
+
+    // --- outside dimension strings ---
+    // top: where the divider meets the north wall, then overall
+    dh(0, 21.2, -2.0, -0.4); dh(21.2, 40, -2.0, -0.4);
+    dh(0, 40, -3.9, -2.4, '40′-0″ overall');
+    // bottom: south wall chain (alcove walls, entry wall)
+    dh(0, 17.8, 22.2, 20.4); dh(17.8, 22.6, 22.2, 20.4); dh(22.6, 30.6, 22.2, 20.4); dh(30.6, 40, 22.2, 20.4);
+    // right: east wall and entry opening, then overall
+    dv(0, 16, 42.2, 40.4); dv(16, 20, 42.2, 40.4, '4′-0″ entry');
+    dv(0, 20, 44.3, 42.6, '20′-0″ overall');
+    // left: west wall and exit opening
+    dv(0, 2, -2.2, -0.4); dv(2, 6, -2.2, -0.4, '4′-0″ exit'); dv(6, 20, -2.2, -0.4);
+    // --- inside dimensions ---
+    dv(0, 8.5, 23.4, 21.4); dv(8.5, 20, 23.4, 21.4, '11′-6″ open');           // divider length + clear gap to the south wall
+    dv(0, 12, 32.8, 30.8, '12′-0″ open'); dv(12, 20, 32.8, 30.8);             // entry wall length + clear gap to the north wall
+    dv(16, 20, 15.7, 17.6);                                                   // alcove wall depth
+
+    tx(0, -5.6, 'N ↑', 's-note', false, 'start');
+    // scale bar: 0–5 ft
+    const sb = 41.0; for (let i = 0; i < 5; i++) out.push(`<rect x="${X(sb - 5 + i)}" y="${Y(-5.75)}" width="${S}" height="6" class="${i % 2 ? 's-sb1' : 's-sb0'}"/>`);
+    tx(sb - 5, -5.15, '0', 's-note'); tx(sb, -5.15, '5 ft', 's-note');
+
+    const svg = `<svg viewBox="0 0 1050 600" role="img" aria-label="Structure plan: the 40 by 20 foot box and every inside wall, dimensioned"><title>Structure plan</title>${out.join('')}</svg>`;
+    const total = SW.reduce((a, w) => a + Math.hypot(w.b[0] - w.a[0], w.b[1] - w.a[1]), 0);
+    const rows = [
+      ['A', 'North wall', fi(40), 'The full north side.'],
+      ['B', 'East wall', fi(16), `From the NE corner running south. Stops ${fi(4)} short of the SE corner for the entry opening.`],
+      ['C', 'South wall', fi(40), 'The full south side.'],
+      ['D', 'West wall', `${fi(2)} + ${fi(14)}`, `Two pieces. ${fi(4)} exit opening starting ${fi(2)} from the NW corner.`],
+      ['E', 'Divider', fi(8.5), `Off the north wall, ${fi(21.2)} from the NW corner (${fi(18.8)} from the NE corner), running south. Open ${fi(11.5)} to the south wall.`],
+      ['F', 'Entry wall', fi(8), `Off the south wall, ${fi(9.4)} from the SE corner, running north. Open ${fi(12)} to the north wall.`],
+      ['G', 'Alcove wall, west', fi(4), `Off the south wall, ${fi(17.8)} from the SW corner, running north.`],
+      ['H', 'Alcove wall, east', fi(4), `Off the south wall, ${fi(22.6)} from the SW corner, running north. ${fi(4.8)} from wall G; open on the north side.`]
+    ].map(([id, n, len, where]) => `<tr><td class="n"><span>${id}</span></td><td><b>${n}</b></td><td class="q">${len}</td><td>${where}</td></tr>`).join('');
+    $('struct2d').innerHTML = `
+      <div class="plan-head"><h3>Structure plan</h3><p>Walls only · all dimensions to wall centre lines · walls 8 ft high, ½ in plywood on 2×4 frames (about 4 in thick)</p><button type="button" class="chip s-print" id="structPrint">Print / save PDF</button></div>
+      <div class="plan-scroll">${svg}</div>
+      <div class="plan-head" style="margin-top:6px"><h3>Wall list</h3><p>${SW.length - 1} walls · ${Math.round(total * 10) / 10} ft of wall in all · letters match the plan</p></div>
+      <div class="mat-scroll"><table class="mat"><thead><tr><th>Wall</th><th>Name</th><th>Length</th><th>Where it goes</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    $('structPrint').addEventListener('click', () => { document.body.classList.add('print-struct'); window.print(); });
+    window.addEventListener('afterprint', () => document.body.classList.remove('print-struct'));
+  }
+
   function build2D() {
     const S = 20, OX = 96, OY = 70, X = v => (OX + v * S).toFixed(1), Y = v => (OY + v * S).toFixed(1);
     const out = [];
@@ -2467,7 +2586,7 @@ window.RP_SIL={"couple":{"w":16.31,"h":33.66,"p":[2.74,33.58,2.36,33.39,2.01,33.
 
   // ---------- loop ----------
   function resize() { const w = viewer.clientWidth, h = viewer.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
-  window.addEventListener('resize', () => { if (mode === '2d') return; resize(); if (mode === 'overview' || mode === 'plan') setMode(mode); });
+  window.addEventListener('resize', () => { if (flat(mode)) return; resize(); if (mode === 'overview' || mode === 'plan') setMode(mode); });
   const tmp = new THREE.Vector3(), wrapAngle = a => Math.atan2(Math.sin(a), Math.cos(a));
   const place = (el, pos, w, h) => { tmp.copy(pos).project(camera); if (tmp.z > 1 || tmp.x < -1.1 || tmp.x > 1.1 || tmp.y < -1.1 || tmp.y > 1.1) { el.hidden = true; return; } el.hidden = false; el.style.left = ((tmp.x + 1) / 2 * w) + 'px'; el.style.top = ((1 - tmp.y) / 2 * h) + 'px'; };
   let last = performance.now();
@@ -2507,7 +2626,7 @@ window.RP_SIL={"couple":{"w":16.31,"h":33.66,"p":[2.74,33.58,2.36,33.39,2.01,33.
     diyaMats.forEach((m, i) => m.color.setRGB(1, 0.56 + 0.1 * Math.sin(t * (7 + i * 3) + i * 2), 0.18 + 0.06 * Math.sin(t * 11 + i)));
     if (alcL) alcL.intensity = 1.1 * (1 + 0.08 * Math.sin(t * 8) + 0.05 * Math.sin(t * 19));
     IDEA_ANIM.forEach(f => f(t, dt));
-    if (mode === '2d') { requestAnimationFrame(tick); return; }
+    if (flat(mode)) { requestAnimationFrame(tick); return; }
     dimGroup.visible = showDims; clearGroup.visible = showClear; spotGroup.visible = showSpots;
     pathGroup.visible = showPath && mode !== 'walk' && mode !== 'roam'; stepWalker(dt, now);
     renderer.render(scene, camera);
@@ -2527,7 +2646,7 @@ window.RP_SIL={"couple":{"w":16.31,"h":33.66,"p":[2.74,33.58,2.36,33.39,2.01,33.
     try {
       const [pc, pg] = cv(256, 256); const gr = pg.createRadialGradient(128, 100, 4, 128, 110, 135); gr.addColorStop(0, 'rgba(255,232,190,.9)'); gr.addColorStop(0.55, 'rgba(255,214,160,.35)'); gr.addColorStop(1, 'rgba(255,200,140,0)'); pg.fillStyle = gr; pg.fillRect(0, 0, 256, 256);
       poolMat = new THREE.MeshBasicMaterial({ map: T(pc), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.42 });
-      buildFloor(); buildWalls(); buildRiti(haloTex()); buildParampara(); buildRoute(); buildIdeas(); buildPIdeas(); buildCards(); buildPanels(); buildSign(); buildStanchions(); buildRitiTitle(); buildLayout2(); buildArtiTV(); buildLights(); buildFixtures(); applyLights(); buildStops(); buildDims(); buildClearance(); build2D();
+      buildFloor(); buildWalls(); buildRiti(haloTex()); buildParampara(); buildRoute(); buildIdeas(); buildPIdeas(); buildCards(); buildPanels(); buildSign(); buildStanchions(); buildRitiTitle(); buildLayout2(); buildArtiTV(); buildLights(); buildFixtures(); applyLights(); buildStops(); buildDims(); buildClearance(); build2D(); buildStruct();
       resize(); setMode('overview'); orbit.radius = goal.radius; orbit.target.copy(goal.target);
       loadingEl.hidden = true;
       requestAnimationFrame(tt => { last = tt; tick(tt); });
